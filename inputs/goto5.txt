@@ -1,0 +1,34 @@
+stack=ARRAY(0)
+goto 10
+
+-> 20
+@OK
+[
+    X=GETB(stack)
+    POPB(stack)
+
+    @POOR
+    [   
+        f=2
+        ->30
+        goif {X%f==0} 40
+        f+=1
+        goif {f*f<=X} 30
+    ]
+    
+    PUSHB(stack,'Y')
+    -> 40
+    PUSHB(stack,'N')
+
+    goback
+]
+
+@OK
+[
+    -> 10
+    NUMIN(X)
+    PUSHB(stack, X)
+    goto 20
+    PRINT(GETB(stack))
+    POPB(stack)
+]

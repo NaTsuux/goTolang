@@ -1,0 +1,41 @@
+注意SPACE和NEWLINE的真正定义
+注意simple_stmt是带NEWLINE的！
+注意SKIP_与NEWLINE都可以匹配SPACES（即[ \t]+），又ANTLR4匹配优先级是在代码里定义的先后位置，所以：
+    原python代码里先NEWLINE后SKIP，也就是SKIP用来处理经过NEWLINE吃之后剩下来的SPACES；
+    原python代码这样做是因为python需要缩进信息，所以不能无脑吃掉所有；
+    而我们不需要缩进信息，所以可以无脑把skip提到最前，解决了困扰我一天的有关[ \t\n]+的报错；
+    至于为何会错，应该是原python代码在使用SPACES和NEWLINE时是有讲究，新加入代码没遵循这些讲究导致出错；
+    也可能和我删了newline第一行后面原来的python代码有关......
+EOF只能匹配一次
+不能有可以匹配空串的规则
+
+
+保留字列表（大小写敏感）：
+    控制流：goto goif(见goto0的例子) if(见goto1的例子) goback(goto回最近一次goto的语句位置)
+    常量（同py语法，用于条件）：True False
+    运算（同py语法，用于条件）：and or not
+    修饰(都见下)：NICE OK POOR 
+    类似函数（见例子）：ARRAY PUSHF PUSHB POPF POPB GETF GETB SHAPE NUMIN STRIN PRINT 
+        ARRAY(x1,x2...) 声明一个任意维度数组，若数组是一维的，则可以使用上面PUSHF~GETF的六个函数
+            PUSHF PUSHB POPF POPB GETF GETB 是将一维ARRAY视作双端队列，因此可以在头尾两段添加、删除、获取元素，POPX无返回值、GETX有返回值
+            SHAPE(ARR, x) 返回ARR数组第x维度的大小
+        NUMIN(x) 读入一个数字到x中
+        STRIN(Arr[x]) 读入一个字符串到以 Arr[x] 开始的一段内存空间中，如STRIN(Arr[3])读入 'abc' 则将存入 Arr[3]~Arr[5] 中
+        PRINT(x) 输出x，x只能是数字或单个字符（输出字符串？用循环一个个输出捏）
+
+
+数组元素可以不同类型（字符或数字）
+全局不允许任何的label重复
+语句用NEWLINE分割（即语句、"["、"]"、"{"、"}"必须占一行），但不强制缩进，允许有多余空行
+
+修饰块：为了让代码编写者知道不要乱goto，他可以声明当前[]块内goto的使用情况，并由解释器进行检查（建议不是执行时检查，而是直接先扫一遍来查）
+修饰只考虑goto和goif，不考虑goback
+    @NICE:
+        块内完全没有goto
+    @OK:
+        块内没有指向块外的goto
+    @POOR:
+        有指向块外的goto
+
+
+getToken的参数i表示返回第i+1个对应类型 如ctx.ASSIGN(1)返回第2个ASSIGN！

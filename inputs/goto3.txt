@@ -1,0 +1,18 @@
+[
+    a=1
+
+    [
+        b=2
+    
+        [
+            c=3
+            PRINT(a) # 可以
+        ]
+    
+        PRINT(a) # 可以
+        PRINT(c) # 报错
+    ]
+
+    PRINT(a) # 可以
+    PRINT(b) # 报错
+]
