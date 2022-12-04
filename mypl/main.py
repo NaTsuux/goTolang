@@ -3,6 +3,7 @@ from antlr4 import FileStream, CommonTokenStream
 from .gen import *
 from .goTolangPreVisitor import goTolangPreVisitor
 from .goTolangMainVisitor import goTolangMainVisitor
+from .goTolangEnv import goTolangEnv
 from .exception import GotoException
 
 
@@ -11,16 +12,16 @@ def run_file(input_stream: FileStream):
     stream = CommonTokenStream(lexer)
     parser = goTolangParser(stream)
     tree = parser.file_input()
-    visitor = goTolangPreVisitor(tree)
-    main_visitor = goTolangMainVisitor(tree)
+    env = goTolangEnv()
+    goTolangPreVisitor(tree, env).run()
+    main_visitor = goTolangMainVisitor(tree, env)
 
-    resume_path = []
+    from_label = None
     while True:
         try:
-            main_visitor.my_visit(resume_path)
+            main_visitor.run(from_label)
             break
         except GotoException as exc:
-            resume_path = visitor.label_d.get(exc.label)
+            from_label = exc.label
 
-    print(visitor.label_d)
-    print(main_visitor.symbol_d)
+    print(main_visitor.env)

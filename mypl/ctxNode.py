@@ -1,7 +1,7 @@
 
 
 class CtxNode:
-    def __init__(self, is_ptr, type, value=None):
+    def __init__(self, is_ptr, type, value):
         self.is_ptr = is_ptr
         self.type = type
         self.value = value

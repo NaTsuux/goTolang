@@ -3,7 +3,7 @@ a=2
 a=a*2+2*(1+2)
 goif {a<100} 10
 
-# PRINT(a)
+PRINT(a)
 goto 20
 a=2
 -> 20

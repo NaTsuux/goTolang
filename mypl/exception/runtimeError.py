@@ -4,5 +4,5 @@ class goTolangRuntimeError(BaseException):
 
 
 class goTolangSymbolNotFoundError(goTolangRuntimeError):
-    def __init__(self):
+    def __init__(self, symbol, ctx):
         super().__init__()

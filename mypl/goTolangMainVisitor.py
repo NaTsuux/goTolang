@@ -1,43 +1,30 @@
+from typing import List
+
 from antlr4.tree import Tree
 
 from .gen import goTolangVisitor, goTolangParser
 from .ctxNode import CtxNode
 from .exception import GotoException, goTolangSymbolNotFoundError
+from .goTolangEnv import goTolangEnv
 
 
 class goTolangMainVisitor(goTolangVisitor):
-    def __init__(self, tree):
+    def __init__(self, tree, env: goTolangEnv):
         super().__init__()
         self.root = tree
-        self.symbol_d = {}
-        self.label_d = {}
+        self.env = env
         self.resume_path = []
 
-    def my_visit(self, path):
-        self.resume_path = path.copy()
+    def run(self, from_label: int):
+        self.resume_path = self.env.get_label_path(from_label)
         node = self.resume_path.pop() if self.resume_path else None
         self.visitChildren(self.root, node)
 
-    def get_value(self, symbol):
-        symbol_meta = self.symbol_d.get(symbol)
-        if symbol_meta is None:
-            raise RuntimeError()  # TODO
-        return symbol_meta["value"]
-
-    def get_type(self, symbol):
-        symbol_meta = self.symbol_d.get(symbol)
-        if symbol_meta is None:
-            raise Exception()  # TODO
-        return symbol_meta["type"]
-
-    def get_symbol_value(self, ctx: CtxNode):
-        if ctx.is_ptr:
-            return self.get_value(ctx.value)
+    def get_ctx_node_value(self, ctx_node: CtxNode, ctx):
+        if ctx_node.is_ptr:
+            return self.env.get_symbol_value(ctx_node.value, ctx)
         else:
-            return ctx.value
-
-    def exists(self, symbol):
-        return self.symbol_d.get(symbol) is not None
+            return ctx_node.value
 
     def visitTerm(self, ctx: goTolangParser.TermContext):
         child_len = len(ctx.children)
@@ -47,9 +34,9 @@ class goTolangMainVisitor(goTolangVisitor):
         if ctx.STAR(0):
             # TODO type check
             left: CtxNode = ctx.children[0].accept(self)
-            left_v = self.get_symbol_value(left)
+            left_v = self.get_ctx_node_value(left, ctx)
             right: CtxNode = ctx.children[2].accept(self)
-            right_v = self.get_symbol_value(right)
+            right_v = self.get_ctx_node_value(right, ctx)
             return CtxNode(is_ptr=False, type="int", value=left_v * right_v)
 
     def visitArith_expr(self, ctx: goTolangParser.Arith_exprContext):
@@ -64,31 +51,33 @@ class goTolangMainVisitor(goTolangVisitor):
             if result.type != right.type:
                 raise Exception("Can't calculate between different type {} and {}".format(result.type, right.type))
 
+            # TODO QAQ so many todo
             if result.type == "int":
                 if ctx.children[i].symbol.type == goTolangParser.ADD:
-                    result_v = ((self.get_value(result.value) if result.is_ptr else result.value)
-                                + (self.get_value(right.value) if right.is_ptr else right.value))
+                    result_v = (self.get_ctx_node_value(result, ctx)
+                                + self.get_ctx_node_value(right, ctx))
                     result = CtxNode(is_ptr=False, type="int", value=result_v)
                 elif ctx.children[i].symbol.type == goTolangParser.MINUS:
-                    result_v = ((self.get_value(result.value) if result.is_ptr else result.value)
-                                - (self.get_value(right.value) if right.is_ptr else right.value))
+                    result_v = (self.get_ctx_node_value(result, ctx)
+                                - self.get_ctx_node_value(right, ctx))
                     result = CtxNode(is_ptr=False, type="int", value=result_v)
         return result
 
     def visitExpr_stmt(self, ctx: goTolangParser.Expr_stmtContext):
-
         if ctx.ASSIGN(0):
             left: CtxNode = ctx.children[0].accept(self)
             if not left.is_ptr:
                 raise Exception("")  # TODO
             right: CtxNode = ctx.children[2].accept(self)
-            right_v = self.get_type(right.value) if right.is_ptr else right.value
+            # TODO todo
+            right_v = self.get_ctx_node_value(right, ctx)
 
             # TODO 判断类型？
-
-            self.symbol_d[left.value] = {"type": right.type, "value": right_v}
+            self.env.set_symbol_value(left.value, right_v, ctx)
 
             return CtxNode(is_ptr=True, type=left.type, value=left.value)
+
+        return ctx.testlist_star_expr(0).accept(self)
 
     def visitBto(self, ctx: goTolangParser.BtoContext):
         label = int(ctx.NUMBER().getText())
@@ -102,18 +91,44 @@ class goTolangMainVisitor(goTolangVisitor):
         else:
             return None
 
+    def visitAtom_expr(self, ctx: goTolangParser.Atom_exprContext):
+        atom: goTolangParser.AtomContext = ctx.atom()
+        atom_ctx_node: CtxNode = atom.accept(self)
+        atom_ctx_v = self.get_ctx_node_value(atom_ctx_node, ctx)
+        trailer_ctx_nodes: List[CtxNode] = [tailer.accept(self) for tailer in ctx.trailer()]
+        if len(trailer_ctx_nodes) == 0:
+            return atom_ctx_node
+        for trailer_ctx_node in trailer_ctx_nodes:
+            if trailer_ctx_node.type == "arg list":
+                # TODO func param check
+                args = trailer_ctx_node.value
+                atom_ctx_v(args[0].value)
+
+    def visitArglist(self, ctx: goTolangParser.ArglistContext):
+        # TODO support multi argument
+        argument_ctx: CtxNode = ctx.argument(0).accept(self)
+        arg_list = []
+        if argument_ctx.is_ptr:
+            arg_list.append(CtxNode(False, **self.env.get_symbol_meta(argument_ctx.value, ctx)))
+        else:
+            arg_list.append(CtxNode(False, argument_ctx.type, argument_ctx.value))
+        return CtxNode(is_ptr=False, type="arg list", value=arg_list)
+
     def visitAtom(self, ctx: goTolangParser.AtomContext):
         if ctx.OPEN_PAREN() is not None:
             return ctx.testlist_comp().accept(self)
-        child: Tree.TerminalNodeImpl = ctx.children[0]
-        if child.symbol.type == goTolangParser.NAME:
-            if not self.exists(child.symbol.text):
-                self.symbol_d[child.symbol.text] = {"type": "int", "value": None}  # TODO
-            ctx_node = CtxNode(is_ptr=True, type=self.get_type(child.symbol.text), value=child.symbol.text)
-        elif child.symbol.type == goTolangParser.NUMBER:
-            ctx_node = CtxNode(is_ptr=False, type="int", value=int(child.symbol.text))
+        if ctx.NAME():
+            child = ctx.NAME()
+            symbol = child.getText()
+            if not self.env.get_symbol_exist(symbol, ctx):
+                self.env.set_symbol_init(symbol, ctx)
+            symbol_meta = self.env.get_symbol_meta(symbol, ctx)
+            ctx_node = CtxNode(is_ptr=True, type=symbol_meta["type"], value=symbol)
+        elif ctx.NUMBER():
+            child = ctx.NUMBER()
+            ctx_node = CtxNode(is_ptr=False, type="int", value=int(child.getText()))
         else:
-            ctx_node = CtxNode(is_ptr=True, type=None)
+            ctx_node = CtxNode(is_ptr=True, type=None, value=None)
 
         return ctx_node
 
@@ -122,9 +137,9 @@ class goTolangMainVisitor(goTolangVisitor):
             return self.visitChildren(ctx)
         # TODO long compare
         left: CtxNode = ctx.children[0].accept(self)
-        left_v = self.get_symbol_value(left)
+        left_v = self.get_ctx_node_value(left, ctx)
         right: CtxNode = ctx.children[2].accept(self)
-        right_v = self.get_symbol_value(right)
+        right_v = self.get_ctx_node_value(right, ctx)
         if ctx.comp_op(0).LESS_THAN():
             return CtxNode(is_ptr=False, type="bool", value=(left_v < right_v))
         # TODO other ops
