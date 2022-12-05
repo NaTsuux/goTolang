@@ -57,6 +57,6 @@ class goTolangEnv:
         return None
 
     def __str__(self):
-        return "goTolang env object: (\n\tsymbol: {}\n\tlabel: {}\n)".format(
+        return "goTolangEnv object: (\n\tsymbol: {}\n\tlabel: {}\n)".format(
             self.symbol_d, self.label_d
         )
