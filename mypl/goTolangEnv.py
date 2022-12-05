@@ -1,13 +1,13 @@
 from .exception import goTolangSymbolNotFoundError
 from .goTolangVar import goTolangVar
-from .ctxNode import CtxNode
+from .func import goTolang_print
 
 
 class goTolangEnv:
     def __init__(self):
         self.symbol_d = {
             "__global": {
-                "PRINT": goTolangVar("PRINT", "builtin func", print)
+                "PRINT": goTolangVar("PRINT", "builtin func", goTolang_print)
             }
         }
         self.label_d = {}

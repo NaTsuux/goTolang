@@ -4,7 +4,7 @@ from .gen import *
 from .goTolangPreVisitor import goTolangPreVisitor
 from .goTolangMainVisitor import goTolangMainVisitor
 from .goTolangEnv import goTolangEnv
-from .exception import GotoException
+from .exception import GotoException, goTolangPreError, goTolangRuntimeError
 
 
 def run_file(input_stream: FileStream):
@@ -13,7 +13,11 @@ def run_file(input_stream: FileStream):
     parser = goTolangParser(stream)
     tree = parser.file_input()
     env = goTolangEnv()
-    goTolangPreVisitor(tree, env).run()
+    try:
+        goTolangPreVisitor(tree, env).run()
+    except goTolangPreError as exc:
+        print(exc.__traceback__)
+        return
     main_visitor = goTolangMainVisitor(tree, env)
 
     from_label = None
@@ -23,5 +27,8 @@ def run_file(input_stream: FileStream):
             break
         except GotoException as exc:
             from_label = exc.label
+        except goTolangRuntimeError as exc:
+            print(repr(exc))
+            return
 
     print(main_visitor.env)

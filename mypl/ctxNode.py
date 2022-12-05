@@ -14,7 +14,7 @@ class CtxNode:
     def cite(self):
         if not self.is_ptr:
             # TODO ctx
-            raise goTolangSymbolCannotCitedError(self._value, None)
+            raise goTolangSymbolCannotCitedError(self._value, self.ctx)
         return self._value
 
     @property

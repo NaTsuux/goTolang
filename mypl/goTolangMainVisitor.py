@@ -4,7 +4,7 @@ from antlr4.tree import Tree
 
 from .gen import goTolangVisitor, goTolangParser
 from .ctxNode import CtxNode
-from .exception import GotoException, goTolangSymbolNotFoundError
+from .exception import *
 from .goTolangEnv import goTolangEnv
 from .goTolangVar import goTolangVar
 
@@ -21,6 +21,17 @@ class goTolangMainVisitor(goTolangVisitor):
         self.resume_path = self.env.get_label_path(from_label)
         node = self.resume_path.pop() if self.resume_path else None
         self.visitChildren(self.root, node)
+
+    def visitIf_stmt(self, ctx: goTolangParser.If_stmtContext):
+        if self.resume_path:
+            next_node = self.resume_path.pop()
+            return next_node.accept(self)
+
+        test_suite_list = list(zip(ctx.or_test(), ctx.suite()))
+        for test_ctx, suite_ctx in test_suite_list:
+            test_v = test_ctx.accept(self)
+            if test_v.value:
+                return suite_ctx.accept(self)
 
     def visitTerm(self, ctx: goTolangParser.TermContext):
         child_len = ctx.getChildCount()
@@ -59,18 +70,25 @@ class goTolangMainVisitor(goTolangVisitor):
         return left
 
     def visitExpr_stmt(self, ctx: goTolangParser.Expr_stmtContext):
+        left: CtxNode = ctx.testlist_star_expr(0).accept(self)
         if ctx.ASSIGN(0):
-            left: CtxNode = ctx.children[0].accept(self)
             if not left.is_ptr:
-                raise Exception("")  # TODO
-            right: CtxNode = ctx.children[2].accept(self)
-
+                raise goTolangSymbolCannotAssignError(left, ctx)
+            right: CtxNode = ctx.testlist_star_expr(1).accept(self)
             # TODO 判断类型？
             left.cite.value = (right.type, right.value)
+        elif ctx.augassign():
+            AUG_ASSIGN: goTolangParser.AugassignContext = ctx.augassign()
+            if not left.is_ptr:
+                raise goTolangSymbolCannotAssignError(left, ctx)
+            right: CtxNode = ctx.testlist().accept(self)
+            if AUG_ASSIGN.ADD_ASSIGN():
+                left.cite.value = (left.cite.type, left.value + right.value)
+            elif AUG_ASSIGN.SUB_ASSIGN():
+                left.cite.value = (left.cite.type, left.value - right.value)
 
-            return CtxNode(is_ptr=True, type="cite", value=left.cite, ctx=ctx)
-
-        return ctx.testlist_star_expr(0).accept(self)
+        return left
+        # return CtxNode(is_ptr=True, type="cite", value=left.cite, ctx=ctx)
 
     def visitBto(self, ctx: goTolangParser.BtoContext):
         label = int(ctx.NUMBER().getText())
@@ -97,13 +115,10 @@ class goTolangMainVisitor(goTolangVisitor):
             if trailer_ctx_node.type == "arg list":
                 # TODO func param check
                 args = trailer_ctx_node.value
-                atom_ctx_v(args[0].value)
+                atom_ctx_v(*[arg.value for arg in args])
 
     def visitArglist(self, ctx: goTolangParser.ArglistContext):
-        # TODO support multi argument
-        argument_ctx: CtxNode = ctx.argument(0).accept(self)
-        arg_list = []
-        arg_list.append(CtxNode(is_ptr=False, type=argument_ctx.type, value=argument_ctx.value, ctx=argument_ctx.ctx))
+        arg_list = [arg_node.accept(self) for arg_node in ctx.argument()]
         return CtxNode(is_ptr=False, type="arg list", value=arg_list, ctx=ctx)
 
     def visitAtom(self, ctx: goTolangParser.AtomContext):
@@ -120,22 +135,42 @@ class goTolangMainVisitor(goTolangVisitor):
         elif ctx.NUMBER():
             child = ctx.NUMBER()
             ctx_node = CtxNode(is_ptr=False, type="int", value=int(child.getText()), ctx=ctx)
+        elif ctx.STRING():
+            # 可能有多个string
+            children = ctx.STRING()
+            ctx_node = CtxNode(is_ptr=False, type="str",
+                               value=''.join([eval(child.getText()) for child in children]), ctx=ctx)
+        elif ctx.BOOL_TRUE():
+            ctx_node = CtxNode(is_ptr=False, type="bool", value=True, ctx=ctx)
+        elif ctx.BOOL_FALSE():
+            ctx_node = CtxNode(is_ptr=False, type="bool", value=False, ctx=ctx)
         else:
-            ctx_node = CtxNode(is_ptr=True, type=None, value=None, ctx=ctx)
+            raise Exception("Not Implement yet!")
 
         return ctx_node
 
     def visitComparison(self, ctx: goTolangParser.ComparisonContext):
-        if ctx.getChildCount() == 1:
+        if not ctx.comp_op():
             return self.visitChildren(ctx)
-        # TODO long compare
-        left: CtxNode = ctx.children[0].accept(self)
-        left_v = left.value
-        right: CtxNode = ctx.children[2].accept(self)
-        right_v = right.value
-        if ctx.comp_op(0).LESS_THAN():
-            return CtxNode(is_ptr=False, type="bool", value=(left_v < right_v), ctx=ctx)
-        # TODO other ops
+        COMP_OP: goTolangParser.Comp_opContext = ctx.comp_op(0)
+        left, right = [child.accept(self) for child in ctx.expr()]
+        left_v, right_v = left.value, right.value
+
+        if COMP_OP.LESS_THAN():
+            result = (left_v < right_v)
+        elif COMP_OP.LT_EQ():
+            result = (left_v <= right_v)
+        elif COMP_OP.GREATER_THAN():
+            result = (left_v > right_v)
+        elif COMP_OP.GT_EQ():
+            result = (left_v >= right_v)
+        elif COMP_OP.EQUALS():
+            result = (left_v == right_v)
+        elif COMP_OP.NOT_EQ_2() or COMP_OP.NOT_EQ_1():
+            result = (left_v != right_v)
+        else:
+            result = False
+        return CtxNode(is_ptr=False, type="bool", value=result, ctx=ctx)
 
     def visitChildren(self, node, begin_node=None):
         result = self.defaultResult()
@@ -165,6 +200,13 @@ class goTolangMainVisitor(goTolangVisitor):
             return self.visitChildren(ctx)
 
     def visitStmt(self, ctx: goTolangParser.StmtContext):
+        if self.resume_path:
+            node = self.resume_path.pop()
+            return self.visitChildren(ctx, node)
+        else:
+            return self.visitChildren(ctx)
+
+    def visitSuite(self, ctx: goTolangParser.SuiteContext):
         if self.resume_path:
             node = self.resume_path.pop()
             return self.visitChildren(ctx, node)

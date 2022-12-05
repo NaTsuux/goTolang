@@ -13,8 +13,9 @@ if
     a<=14 and a<=12: # a共+2
         goto 20
     True: # True 用来实现 else 的功能
-        pass
+        goto 30
 }
 goto 10
+-> 30
 
 # 正确输出为 1 2 3 4 5 8 10 12 14

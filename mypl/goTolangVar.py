@@ -13,7 +13,6 @@ class goTolangVar:
 
     @property
     def value(self):
-
         if self.type == "undefined":
             raise goTolangSymbolUndefinedError(self.name, None)
         return self._value

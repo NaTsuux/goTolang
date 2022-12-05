@@ -10,4 +10,4 @@ a=a+1
 
 
 if __name__ == '__main__':
-    run_file(FileStream("inputs/goto0.txt", 'utf-8'))
+    run_file(FileStream("inputs/goto1.txt", 'utf-8'))

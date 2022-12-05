@@ -25,8 +25,7 @@ goto_stmt: 'goto' NUMBER # Bto
             | 'goif' '{'or_test '}' NUMBER # Bif
             ;
 label_stmt: '->' NUMBER;
-expr_stmt: testlist_star_expr (annassign | augassign (testlist) |
-                     ('=' (testlist_star_expr))*);
+expr_stmt: testlist_star_expr (annassign | augassign (testlist) | ('=' (testlist_star_expr))*);
 annassign: ':' or_test ('=' or_test)?;
 testlist_star_expr: (or_test|star_expr) (',' (or_test|star_expr))* (',')?;
 augassign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
@@ -62,7 +61,8 @@ power: atom_expr ('**' factor)?;
 atom_expr: atom trailer*;
 atom: ('(' (testlist_comp)? ')' |
        '[' (testlist_comp)? ']' |
-       NAME | NUMBER | STRING+ | '...' | 'None' | 'True' | 'False');
+       'True' | 'False' |
+       NAME | NUMBER | STRING+ | '...' | 'None');
 testlist_comp: (or_test|star_expr) ( (',' (or_test|star_expr))* (',')? );
 trailer: '(' (arglist)? ')' | '[' subscriptlist ']' | '.' NAME;
 subscriptlist: subscript (',' subscript)* (',')?;
@@ -163,6 +163,8 @@ IMAG_NUMBER
 
 DOT : '.';
 ELLIPSIS : '...';
+BOOL_TRUE: 'True';
+BOOL_FALSE: 'False';
 STAR : '*';
 OPEN_PAREN : '(' ;
 CLOSE_PAREN : ')';
