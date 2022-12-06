@@ -1,10 +1,10 @@
 from antlr4 import FileStream, CommonTokenStream
 
-from .gen import *
-from .goTolangPreVisitor import goTolangPreVisitor
-from .goTolangMainVisitor import goTolangMainVisitor
 from .base.env import GoTolangEnv
 from .exception import GotoException, goTolangPreError, goTolangRuntimeError
+from .gen import *
+from .goTolangMainVisitor import goTolangMainVisitor
+from .goTolangPreVisitor import goTolangPreVisitor
 
 
 def run_file(input_stream: FileStream):

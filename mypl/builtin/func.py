@@ -1,6 +1,6 @@
-from .array import GoTolangArray
 from mypl.base.ctx_node import CtxNode
 from mypl.base.var import GoTolangVar, GoTolangArrEle
+from .array import GoTolangArray
 
 
 class GoTolangFunc:

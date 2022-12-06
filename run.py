@@ -1,4 +1,5 @@
-from antlr4 import FileStream, StdinStream
+from antlr4 import FileStream
+
 from mypl import run_file
 
 src = """\
@@ -8,6 +9,5 @@ a=a+1
 ->10
 """
 
-
 if __name__ == '__main__':
-    run_file(FileStream("inputs/goto2.txt", 'utf-8'))
+    run_file(FileStream("inputs/goto3.txt", 'utf-8'))

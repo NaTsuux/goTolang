@@ -1,4 +1,3 @@
-
 class goTolangPreError(BaseException):
     def __init__(self):
         pass

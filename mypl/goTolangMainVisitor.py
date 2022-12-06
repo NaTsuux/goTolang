@@ -2,10 +2,10 @@ from typing import List
 
 from antlr4.tree import Tree
 
-from .gen import goTolangVisitor, goTolangParser
-from .exception import *
-from .base import GoTolangEnv, GoTolangVar, CtxNode
+from .base import GoTolangEnv, CtxNode
 from .builtin import GoTolangArray, GoTolangFunc
+from .exception import *
+from .gen import goTolangVisitor, goTolangParser
 
 
 class goTolangMainVisitor(goTolangVisitor):

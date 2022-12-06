@@ -1,453 +1,406 @@
 # Generated from C:/Users/NaTsuu/pl\goTolang.g4 by ANTLR 4.11.1
 from antlr4 import *
+
 if __name__ is not None and "." in __name__:
     from .goTolangParser import goTolangParser
 else:
     from goTolangParser import goTolangParser
 
+
 # This class defines a complete listener for a parse tree produced by goTolangParser.
 class goTolangListener(ParseTreeListener):
 
     # Enter a parse tree produced by goTolangParser#file_input.
-    def enterFile_input(self, ctx:goTolangParser.File_inputContext):
+    def enterFile_input(self, ctx: goTolangParser.File_inputContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#file_input.
-    def exitFile_input(self, ctx:goTolangParser.File_inputContext):
+    def exitFile_input(self, ctx: goTolangParser.File_inputContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#file_input_no_eof.
-    def enterFile_input_no_eof(self, ctx:goTolangParser.File_input_no_eofContext):
+    def enterFile_input_no_eof(self, ctx: goTolangParser.File_input_no_eofContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#file_input_no_eof.
-    def exitFile_input_no_eof(self, ctx:goTolangParser.File_input_no_eofContext):
+    def exitFile_input_no_eof(self, ctx: goTolangParser.File_input_no_eofContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#stmt.
-    def enterStmt(self, ctx:goTolangParser.StmtContext):
+    def enterStmt(self, ctx: goTolangParser.StmtContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#stmt.
-    def exitStmt(self, ctx:goTolangParser.StmtContext):
+    def exitStmt(self, ctx: goTolangParser.StmtContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#simple_stmt.
-    def enterSimple_stmt(self, ctx:goTolangParser.Simple_stmtContext):
+    def enterSimple_stmt(self, ctx: goTolangParser.Simple_stmtContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#simple_stmt.
-    def exitSimple_stmt(self, ctx:goTolangParser.Simple_stmtContext):
+    def exitSimple_stmt(self, ctx: goTolangParser.Simple_stmtContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#Bexpr.
-    def enterBexpr(self, ctx:goTolangParser.BexprContext):
+    def enterBexpr(self, ctx: goTolangParser.BexprContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#Bexpr.
-    def exitBexpr(self, ctx:goTolangParser.BexprContext):
+    def exitBexpr(self, ctx: goTolangParser.BexprContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#Bpass.
-    def enterBpass(self, ctx:goTolangParser.BpassContext):
+    def enterBpass(self, ctx: goTolangParser.BpassContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#Bpass.
-    def exitBpass(self, ctx:goTolangParser.BpassContext):
+    def exitBpass(self, ctx: goTolangParser.BpassContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#Bgoback.
-    def enterBgoback(self, ctx:goTolangParser.BgobackContext):
+    def enterBgoback(self, ctx: goTolangParser.BgobackContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#Bgoback.
-    def exitBgoback(self, ctx:goTolangParser.BgobackContext):
+    def exitBgoback(self, ctx: goTolangParser.BgobackContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#Bgoto.
-    def enterBgoto(self, ctx:goTolangParser.BgotoContext):
+    def enterBgoto(self, ctx: goTolangParser.BgotoContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#Bgoto.
-    def exitBgoto(self, ctx:goTolangParser.BgotoContext):
+    def exitBgoto(self, ctx: goTolangParser.BgotoContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#Blabel.
-    def enterBlabel(self, ctx:goTolangParser.BlabelContext):
+    def enterBlabel(self, ctx: goTolangParser.BlabelContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#Blabel.
-    def exitBlabel(self, ctx:goTolangParser.BlabelContext):
+    def exitBlabel(self, ctx: goTolangParser.BlabelContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#Bto.
-    def enterBto(self, ctx:goTolangParser.BtoContext):
+    def enterBto(self, ctx: goTolangParser.BtoContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#Bto.
-    def exitBto(self, ctx:goTolangParser.BtoContext):
+    def exitBto(self, ctx: goTolangParser.BtoContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#Bif.
-    def enterBif(self, ctx:goTolangParser.BifContext):
+    def enterBif(self, ctx: goTolangParser.BifContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#Bif.
-    def exitBif(self, ctx:goTolangParser.BifContext):
+    def exitBif(self, ctx: goTolangParser.BifContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#label_stmt.
-    def enterLabel_stmt(self, ctx:goTolangParser.Label_stmtContext):
+    def enterLabel_stmt(self, ctx: goTolangParser.Label_stmtContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#label_stmt.
-    def exitLabel_stmt(self, ctx:goTolangParser.Label_stmtContext):
+    def exitLabel_stmt(self, ctx: goTolangParser.Label_stmtContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#expr_stmt.
-    def enterExpr_stmt(self, ctx:goTolangParser.Expr_stmtContext):
+    def enterExpr_stmt(self, ctx: goTolangParser.Expr_stmtContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#expr_stmt.
-    def exitExpr_stmt(self, ctx:goTolangParser.Expr_stmtContext):
+    def exitExpr_stmt(self, ctx: goTolangParser.Expr_stmtContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#annassign.
-    def enterAnnassign(self, ctx:goTolangParser.AnnassignContext):
+    def enterAnnassign(self, ctx: goTolangParser.AnnassignContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#annassign.
-    def exitAnnassign(self, ctx:goTolangParser.AnnassignContext):
+    def exitAnnassign(self, ctx: goTolangParser.AnnassignContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#testlist_star_expr.
-    def enterTestlist_star_expr(self, ctx:goTolangParser.Testlist_star_exprContext):
+    def enterTestlist_star_expr(self, ctx: goTolangParser.Testlist_star_exprContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#testlist_star_expr.
-    def exitTestlist_star_expr(self, ctx:goTolangParser.Testlist_star_exprContext):
+    def exitTestlist_star_expr(self, ctx: goTolangParser.Testlist_star_exprContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#augassign.
-    def enterAugassign(self, ctx:goTolangParser.AugassignContext):
+    def enterAugassign(self, ctx: goTolangParser.AugassignContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#augassign.
-    def exitAugassign(self, ctx:goTolangParser.AugassignContext):
+    def exitAugassign(self, ctx: goTolangParser.AugassignContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#pass_stmt.
-    def enterPass_stmt(self, ctx:goTolangParser.Pass_stmtContext):
+    def enterPass_stmt(self, ctx: goTolangParser.Pass_stmtContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#pass_stmt.
-    def exitPass_stmt(self, ctx:goTolangParser.Pass_stmtContext):
+    def exitPass_stmt(self, ctx: goTolangParser.Pass_stmtContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#goback_stmt.
-    def enterGoback_stmt(self, ctx:goTolangParser.Goback_stmtContext):
+    def enterGoback_stmt(self, ctx: goTolangParser.Goback_stmtContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#goback_stmt.
-    def exitGoback_stmt(self, ctx:goTolangParser.Goback_stmtContext):
+    def exitGoback_stmt(self, ctx: goTolangParser.Goback_stmtContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#raise_stmt.
-    def enterRaise_stmt(self, ctx:goTolangParser.Raise_stmtContext):
+    def enterRaise_stmt(self, ctx: goTolangParser.Raise_stmtContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#raise_stmt.
-    def exitRaise_stmt(self, ctx:goTolangParser.Raise_stmtContext):
+    def exitRaise_stmt(self, ctx: goTolangParser.Raise_stmtContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#dotted_as_name.
-    def enterDotted_as_name(self, ctx:goTolangParser.Dotted_as_nameContext):
+    def enterDotted_as_name(self, ctx: goTolangParser.Dotted_as_nameContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#dotted_as_name.
-    def exitDotted_as_name(self, ctx:goTolangParser.Dotted_as_nameContext):
+    def exitDotted_as_name(self, ctx: goTolangParser.Dotted_as_nameContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#dotted_as_names.
-    def enterDotted_as_names(self, ctx:goTolangParser.Dotted_as_namesContext):
+    def enterDotted_as_names(self, ctx: goTolangParser.Dotted_as_namesContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#dotted_as_names.
-    def exitDotted_as_names(self, ctx:goTolangParser.Dotted_as_namesContext):
+    def exitDotted_as_names(self, ctx: goTolangParser.Dotted_as_namesContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#dotted_name.
-    def enterDotted_name(self, ctx:goTolangParser.Dotted_nameContext):
+    def enterDotted_name(self, ctx: goTolangParser.Dotted_nameContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#dotted_name.
-    def exitDotted_name(self, ctx:goTolangParser.Dotted_nameContext):
+    def exitDotted_name(self, ctx: goTolangParser.Dotted_nameContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#if_stmt.
-    def enterIf_stmt(self, ctx:goTolangParser.If_stmtContext):
+    def enterIf_stmt(self, ctx: goTolangParser.If_stmtContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#if_stmt.
-    def exitIf_stmt(self, ctx:goTolangParser.If_stmtContext):
+    def exitIf_stmt(self, ctx: goTolangParser.If_stmtContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#suite.
-    def enterSuite(self, ctx:goTolangParser.SuiteContext):
+    def enterSuite(self, ctx: goTolangParser.SuiteContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#suite.
-    def exitSuite(self, ctx:goTolangParser.SuiteContext):
+    def exitSuite(self, ctx: goTolangParser.SuiteContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#or_test.
-    def enterOr_test(self, ctx:goTolangParser.Or_testContext):
+    def enterOr_test(self, ctx: goTolangParser.Or_testContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#or_test.
-    def exitOr_test(self, ctx:goTolangParser.Or_testContext):
+    def exitOr_test(self, ctx: goTolangParser.Or_testContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#and_test.
-    def enterAnd_test(self, ctx:goTolangParser.And_testContext):
+    def enterAnd_test(self, ctx: goTolangParser.And_testContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#and_test.
-    def exitAnd_test(self, ctx:goTolangParser.And_testContext):
+    def exitAnd_test(self, ctx: goTolangParser.And_testContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#not_test.
-    def enterNot_test(self, ctx:goTolangParser.Not_testContext):
+    def enterNot_test(self, ctx: goTolangParser.Not_testContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#not_test.
-    def exitNot_test(self, ctx:goTolangParser.Not_testContext):
+    def exitNot_test(self, ctx: goTolangParser.Not_testContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#comparison.
-    def enterComparison(self, ctx:goTolangParser.ComparisonContext):
+    def enterComparison(self, ctx: goTolangParser.ComparisonContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#comparison.
-    def exitComparison(self, ctx:goTolangParser.ComparisonContext):
+    def exitComparison(self, ctx: goTolangParser.ComparisonContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#comp_op.
-    def enterComp_op(self, ctx:goTolangParser.Comp_opContext):
+    def enterComp_op(self, ctx: goTolangParser.Comp_opContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#comp_op.
-    def exitComp_op(self, ctx:goTolangParser.Comp_opContext):
+    def exitComp_op(self, ctx: goTolangParser.Comp_opContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#star_expr.
-    def enterStar_expr(self, ctx:goTolangParser.Star_exprContext):
+    def enterStar_expr(self, ctx: goTolangParser.Star_exprContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#star_expr.
-    def exitStar_expr(self, ctx:goTolangParser.Star_exprContext):
+    def exitStar_expr(self, ctx: goTolangParser.Star_exprContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#expr.
-    def enterExpr(self, ctx:goTolangParser.ExprContext):
+    def enterExpr(self, ctx: goTolangParser.ExprContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#expr.
-    def exitExpr(self, ctx:goTolangParser.ExprContext):
+    def exitExpr(self, ctx: goTolangParser.ExprContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#xor_expr.
-    def enterXor_expr(self, ctx:goTolangParser.Xor_exprContext):
+    def enterXor_expr(self, ctx: goTolangParser.Xor_exprContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#xor_expr.
-    def exitXor_expr(self, ctx:goTolangParser.Xor_exprContext):
+    def exitXor_expr(self, ctx: goTolangParser.Xor_exprContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#and_expr.
-    def enterAnd_expr(self, ctx:goTolangParser.And_exprContext):
+    def enterAnd_expr(self, ctx: goTolangParser.And_exprContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#and_expr.
-    def exitAnd_expr(self, ctx:goTolangParser.And_exprContext):
+    def exitAnd_expr(self, ctx: goTolangParser.And_exprContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#shift_expr.
-    def enterShift_expr(self, ctx:goTolangParser.Shift_exprContext):
+    def enterShift_expr(self, ctx: goTolangParser.Shift_exprContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#shift_expr.
-    def exitShift_expr(self, ctx:goTolangParser.Shift_exprContext):
+    def exitShift_expr(self, ctx: goTolangParser.Shift_exprContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#arith_expr.
-    def enterArith_expr(self, ctx:goTolangParser.Arith_exprContext):
+    def enterArith_expr(self, ctx: goTolangParser.Arith_exprContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#arith_expr.
-    def exitArith_expr(self, ctx:goTolangParser.Arith_exprContext):
+    def exitArith_expr(self, ctx: goTolangParser.Arith_exprContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#term.
-    def enterTerm(self, ctx:goTolangParser.TermContext):
+    def enterTerm(self, ctx: goTolangParser.TermContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#term.
-    def exitTerm(self, ctx:goTolangParser.TermContext):
+    def exitTerm(self, ctx: goTolangParser.TermContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#factor.
-    def enterFactor(self, ctx:goTolangParser.FactorContext):
+    def enterFactor(self, ctx: goTolangParser.FactorContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#factor.
-    def exitFactor(self, ctx:goTolangParser.FactorContext):
+    def exitFactor(self, ctx: goTolangParser.FactorContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#power.
-    def enterPower(self, ctx:goTolangParser.PowerContext):
+    def enterPower(self, ctx: goTolangParser.PowerContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#power.
-    def exitPower(self, ctx:goTolangParser.PowerContext):
+    def exitPower(self, ctx: goTolangParser.PowerContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#atom_expr.
-    def enterAtom_expr(self, ctx:goTolangParser.Atom_exprContext):
+    def enterAtom_expr(self, ctx: goTolangParser.Atom_exprContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#atom_expr.
-    def exitAtom_expr(self, ctx:goTolangParser.Atom_exprContext):
+    def exitAtom_expr(self, ctx: goTolangParser.Atom_exprContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#atom.
-    def enterAtom(self, ctx:goTolangParser.AtomContext):
+    def enterAtom(self, ctx: goTolangParser.AtomContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#atom.
-    def exitAtom(self, ctx:goTolangParser.AtomContext):
+    def exitAtom(self, ctx: goTolangParser.AtomContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#testlist_comp.
-    def enterTestlist_comp(self, ctx:goTolangParser.Testlist_compContext):
+    def enterTestlist_comp(self, ctx: goTolangParser.Testlist_compContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#testlist_comp.
-    def exitTestlist_comp(self, ctx:goTolangParser.Testlist_compContext):
+    def exitTestlist_comp(self, ctx: goTolangParser.Testlist_compContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#trailer.
-    def enterTrailer(self, ctx:goTolangParser.TrailerContext):
+    def enterTrailer(self, ctx: goTolangParser.TrailerContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#trailer.
-    def exitTrailer(self, ctx:goTolangParser.TrailerContext):
+    def exitTrailer(self, ctx: goTolangParser.TrailerContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#subscriptlist.
-    def enterSubscriptlist(self, ctx:goTolangParser.SubscriptlistContext):
+    def enterSubscriptlist(self, ctx: goTolangParser.SubscriptlistContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#subscriptlist.
-    def exitSubscriptlist(self, ctx:goTolangParser.SubscriptlistContext):
+    def exitSubscriptlist(self, ctx: goTolangParser.SubscriptlistContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#subscript.
-    def enterSubscript(self, ctx:goTolangParser.SubscriptContext):
+    def enterSubscript(self, ctx: goTolangParser.SubscriptContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#subscript.
-    def exitSubscript(self, ctx:goTolangParser.SubscriptContext):
+    def exitSubscript(self, ctx: goTolangParser.SubscriptContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#sliceop.
-    def enterSliceop(self, ctx:goTolangParser.SliceopContext):
+    def enterSliceop(self, ctx: goTolangParser.SliceopContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#sliceop.
-    def exitSliceop(self, ctx:goTolangParser.SliceopContext):
+    def exitSliceop(self, ctx: goTolangParser.SliceopContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#exprlist.
-    def enterExprlist(self, ctx:goTolangParser.ExprlistContext):
+    def enterExprlist(self, ctx: goTolangParser.ExprlistContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#exprlist.
-    def exitExprlist(self, ctx:goTolangParser.ExprlistContext):
+    def exitExprlist(self, ctx: goTolangParser.ExprlistContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#testlist.
-    def enterTestlist(self, ctx:goTolangParser.TestlistContext):
+    def enterTestlist(self, ctx: goTolangParser.TestlistContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#testlist.
-    def exitTestlist(self, ctx:goTolangParser.TestlistContext):
+    def exitTestlist(self, ctx: goTolangParser.TestlistContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#arglist.
-    def enterArglist(self, ctx:goTolangParser.ArglistContext):
+    def enterArglist(self, ctx: goTolangParser.ArglistContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#arglist.
-    def exitArglist(self, ctx:goTolangParser.ArglistContext):
+    def exitArglist(self, ctx: goTolangParser.ArglistContext):
         pass
 
-
     # Enter a parse tree produced by goTolangParser#argument.
-    def enterArgument(self, ctx:goTolangParser.ArgumentContext):
+    def enterArgument(self, ctx: goTolangParser.ArgumentContext):
         pass
 
     # Exit a parse tree produced by goTolangParser#argument.
-    def exitArgument(self, ctx:goTolangParser.ArgumentContext):
+    def exitArgument(self, ctx: goTolangParser.ArgumentContext):
         pass
-
 
 
 del goTolangParser

@@ -1,4 +1,5 @@
 from typing import Tuple
+
 from mypl.base.var import GoTolangArrEle
 
 
@@ -6,6 +7,7 @@ class GoTolangArray:
     class ArrEleUndef:
         def __init__(self):
             pass
+
     undef = ArrEleUndef()
 
     def __init__(self, dim):

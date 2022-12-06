@@ -1,8 +1,7 @@
 from typing import Union
 
-from .var import GoTolangVar
-from mypl.exception import goTolangSymbolNotFoundError
 from mypl.builtin import *
+from mypl.exception import goTolangSymbolNotFoundError
 
 
 class GoTolangEnv:
@@ -24,18 +23,6 @@ class GoTolangEnv:
         if res is None:
             raise goTolangSymbolNotFoundError(symbol, ctx)
         return res
-
-    # def get_ctx_node_value(self, symbol, ctx):
-    #     """
-    #     只有ctx_node.is_ptr 才需要转到这一层
-    #     ctx在这一层用来确定 该变量名是在哪个作用域
-    #     再往下就不需要ctx 变量本身不关心这个
-    #     """
-    #     return self.get_symbol_value(symbol, ctx)
-    #
-    # def get_symbol_value(self, symbol, ctx):
-    #     # TODO use ctx
-    #     return self.symbol_d["__global"].get(symbol).value
 
     def get_symbol_exist(self, symbol, ctx):
         # TODO use ctx

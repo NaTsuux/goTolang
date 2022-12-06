@@ -1,7 +1,5 @@
-from antlr4.tree import Tree
-
-from .gen import goTolangVisitor, goTolangParser
 from .exception import duplicatedLabelError, longComparisonError
+from .gen import goTolangVisitor, goTolangParser
 
 
 class goTolangPreVisitor(goTolangVisitor):
