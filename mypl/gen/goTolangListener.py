@@ -154,38 +154,6 @@ class goTolangListener(ParseTreeListener):
     def exitGoback_stmt(self, ctx: goTolangParser.Goback_stmtContext):
         pass
 
-    # Enter a parse tree produced by goTolangParser#raise_stmt.
-    def enterRaise_stmt(self, ctx: goTolangParser.Raise_stmtContext):
-        pass
-
-    # Exit a parse tree produced by goTolangParser#raise_stmt.
-    def exitRaise_stmt(self, ctx: goTolangParser.Raise_stmtContext):
-        pass
-
-    # Enter a parse tree produced by goTolangParser#dotted_as_name.
-    def enterDotted_as_name(self, ctx: goTolangParser.Dotted_as_nameContext):
-        pass
-
-    # Exit a parse tree produced by goTolangParser#dotted_as_name.
-    def exitDotted_as_name(self, ctx: goTolangParser.Dotted_as_nameContext):
-        pass
-
-    # Enter a parse tree produced by goTolangParser#dotted_as_names.
-    def enterDotted_as_names(self, ctx: goTolangParser.Dotted_as_namesContext):
-        pass
-
-    # Exit a parse tree produced by goTolangParser#dotted_as_names.
-    def exitDotted_as_names(self, ctx: goTolangParser.Dotted_as_namesContext):
-        pass
-
-    # Enter a parse tree produced by goTolangParser#dotted_name.
-    def enterDotted_name(self, ctx: goTolangParser.Dotted_nameContext):
-        pass
-
-    # Exit a parse tree produced by goTolangParser#dotted_name.
-    def exitDotted_name(self, ctx: goTolangParser.Dotted_nameContext):
-        pass
-
     # Enter a parse tree produced by goTolangParser#if_stmt.
     def enterIf_stmt(self, ctx: goTolangParser.If_stmtContext):
         pass

@@ -15,6 +15,8 @@ class GoTolangFunc:
             return CtxNode(is_ptr=False, type="int", value=ret, ctx=None)
         elif isinstance(ret, GoTolangArrEle):
             return CtxNode(is_ptr=True, type="arr ele", value=ret, ctx=None)
+        elif isinstance(ret, str):
+            return CtxNode(is_ptr=False, type="str", value=ret, ctx=None)
         else:
             raise Exception("Not implement")
 
@@ -68,8 +70,42 @@ def _goTolang_array_strin(*args):
     return 0
 
 
+def _goTolang_array_getb(*args):
+    arr = args[0]
+    if isinstance(arr, GoTolangVar):
+        arr = arr.value
+    if not isinstance(arr, GoTolangArray):
+        raise Exception("")  # TODO type check error
+    return arr.get_b()
+
+
+def _goTolang_array_popb(*args):
+    arr = args[0]
+    if isinstance(arr, GoTolangVar):
+        arr = arr.value
+    if not isinstance(arr, GoTolangArray):
+        raise Exception("")  # TODO type check error
+    arr.pop_b()
+    return 0
+
+
+def _goTolang_array_pushb(*args):
+    arr, value = args
+    if isinstance(arr, GoTolangVar):
+        arr = arr.value
+    if isinstance(value, GoTolangVar):
+        value = value.value
+    if not isinstance(arr, GoTolangArray):
+        raise Exception("")  # TODO type check error
+    arr.push_b(value)
+    return 0
+
+
 goTolang_print = GoTolangFunc(_goTolang_print)
 goTolang_array_init = GoTolangFunc(_goTolang_array_init)
 goTolang_array_shape = GoTolangFunc(_goTolang_array_shape)
 goTolang_array_numin = GoTolangFunc(_goTolang_array_numin)
 goTolang_array_strin = GoTolangFunc(_goTolang_array_strin)
+goTolang_array_getb = GoTolangFunc(_goTolang_array_getb)
+goTolang_array_popb = GoTolangFunc(_goTolang_array_popb)
+goTolang_array_pushb = GoTolangFunc(_goTolang_array_pushb)

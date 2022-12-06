@@ -17,18 +17,20 @@ goto 10
     ]
     
     PUSHB(stack,'Y')
+    goback <- 20
     -> 40
     PUSHB(stack,'N')
-
-    goback
+    goback <- 20
 ]
 
 @OK
 [
     -> 10
+    X=0
     NUMIN(X)
     PUSHB(stack, X)
     goto 20
     PRINT(GETB(stack))
     POPB(stack)
+    goto 10
 ]

@@ -5,6 +5,7 @@ from antlr4.tree import Tree
 from .base import GoTolangEnv, CtxNode
 from .builtin import GoTolangArray, GoTolangFunc
 from .exception import *
+from .exception.gotoException import GobackException
 from .gen import goTolangVisitor, goTolangParser
 from .wrapper import change_env
 
@@ -17,11 +18,16 @@ class goTolangMainVisitor(goTolangVisitor):
         self.resume_path = []
         self.left = False
 
-    def run(self, from_label: int):
+    def run(self, to_label: int = None, back_label: int = None):
         self.env.cur_symbol_env_clear()
-        self.resume_path = self.env.get_label_path(from_label)
-        node = self.resume_path.pop() if self.resume_path else None
-        self.visitChildren(self.root, node)
+        if not to_label and not back_label:
+            return self.visitChildren(self.root)
+        if to_label:
+            self.resume_path = self.env.get_label_path(to_label)
+        elif back_label:
+            self.resume_path = self.env.get_last_goto_path(back_label)
+        node = self.resume_path.pop()
+        return self.visitChildren(self.root, node)
 
     def visitIf_stmt(self, ctx: goTolangParser.If_stmtContext):
         if self.resume_path:
@@ -38,7 +44,7 @@ class goTolangMainVisitor(goTolangVisitor):
         child_len = ctx.getChildCount()
         if child_len == 1:
             return ctx.children[0].accept(self)
-
+        # TODO long
         if ctx.STAR(0):
             # TODO type check
             left: CtxNode = ctx.children[0].accept(self)
@@ -46,6 +52,12 @@ class goTolangMainVisitor(goTolangVisitor):
             right: CtxNode = ctx.children[2].accept(self)
             right_v = right.value
             return CtxNode(is_ptr=False, type="int", value=left_v * right_v, ctx=ctx)
+        elif ctx.MOD(0):
+            left: CtxNode = ctx.children[0].accept(self)
+            left_v = left.value
+            right: CtxNode = ctx.children[2].accept(self)
+            right_v = right.value
+            return CtxNode(is_ptr=False, type="int", value=left_v % right_v, ctx=ctx)
 
     def visitArith_expr(self, ctx: goTolangParser.Arith_exprContext):
         child_len = ctx.getChildCount()
@@ -99,14 +111,20 @@ class goTolangMainVisitor(goTolangVisitor):
         return left
         # return CtxNode(is_ptr=True, type="cite", value=left.cite, ctx=ctx)
 
+    def visitGoback_stmt(self, ctx: goTolangParser.Goback_stmtContext):
+        label = int(ctx.NUMBER().getText())
+        raise GobackException(label)
+
     def visitBto(self, ctx: goTolangParser.BtoContext):
         label = int(ctx.NUMBER().getText())
+        self.env.last_goto[label] = ctx
         raise GotoException(label)
 
     def visitBif(self, ctx: goTolangParser.BifContext):
         label = int(ctx.NUMBER().getText())
         cond: CtxNode = ctx.or_test().accept(self)
         if cond.value:
+            self.env.last_goto[label] = ctx
             raise GotoException(label)
         else:
             return None
@@ -123,7 +141,11 @@ class goTolangMainVisitor(goTolangVisitor):
                 args = trailer_ctx_node.value
                 if not isinstance(ret.value, GoTolangFunc):
                     raise Exception("Error type")  # TODO
-                ret = ret.value(*(arg.cite if arg.is_ptr else arg.value for arg in args))
+                try:
+                    ret = ret.value(*(arg.cite if arg.is_ptr else arg.value for arg in args))
+                except goTolangRuntimeError as exc:
+                    exc.ctx = ctx
+                    raise exc
                 ret.ctx = ctx
             elif trailer_ctx_node.type == "sub list":
                 # TODO type check
@@ -158,11 +180,9 @@ class goTolangMainVisitor(goTolangVisitor):
         elif ctx.NUMBER():
             child = ctx.NUMBER()
             ctx_node = CtxNode(is_ptr=False, type="int", value=int(child.getText()), ctx=ctx)
-        elif ctx.STRING():
-            # 可能有多个string
-            children = ctx.STRING()
-            ctx_node = CtxNode(is_ptr=False, type="str",
-                               value=''.join([eval(child.getText()) for child in children]), ctx=ctx)
+        elif ctx.CHAR():
+            child = ctx.CHAR()
+            ctx_node = CtxNode(is_ptr=False, type="str", value=eval(child.getText()), ctx=ctx)
         elif ctx.BOOL_TRUE():
             ctx_node = CtxNode(is_ptr=False, type="bool", value=True, ctx=ctx)
         elif ctx.BOOL_FALSE():
@@ -189,7 +209,7 @@ class goTolangMainVisitor(goTolangVisitor):
             result = (left_v >= right_v)
         elif COMP_OP.EQUALS():
             result = (left_v == right_v)
-        elif COMP_OP.NOT_EQ_2() or COMP_OP.NOT_EQ_1():
+        elif COMP_OP.NOT_EQ_2():
             result = (left_v != right_v)
         else:
             result = False
@@ -207,7 +227,6 @@ class goTolangMainVisitor(goTolangVisitor):
 
         return result
 
-    # Visit a parse tree produced by goTolangParser#file_input.
     def visitFile_input(self, ctx: goTolangParser.File_inputContext):
         if self.resume_path:
             node = self.resume_path.pop()
@@ -248,5 +267,12 @@ class goTolangMainVisitor(goTolangVisitor):
         if self.resume_path:
             node = self.resume_path.pop()
             return self.visitChildren(ctx, node)
+        else:
+            return self.visitChildren(ctx)
+
+    def visitBgoto(self, ctx: goTolangParser.BgotoContext):
+        if self.resume_path:
+            node = self.resume_path.pop()
+            return None  # 不许执行
         else:
             return self.visitChildren(ctx)

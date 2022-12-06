@@ -1,9 +1,7 @@
-b=1
-[
-    b=2
-    goto 10
-]
-[
-    -> 10
-    PRINT(b)
-]
+stack = ARRAY(0)
+PUSHB(stack, 1)
+PRINT(stack[0])
+x=GETB(stack)
+PRINT(x)
+POPB(stack)
+

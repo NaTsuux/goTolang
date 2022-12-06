@@ -1,23 +1,16 @@
 from typing import Tuple
 
 from mypl.base.var import GoTolangArrEle
+from mypl.exception import goTolangArrayDimNotOne
 
 
 class GoTolangArray:
-    class ArrEleUndef:
-        def __init__(self):
-            pass
-
-    undef = ArrEleUndef()
 
     def __init__(self, dim):
-        try:
-            self._ndim = len(dim)
-            self._dim = dim
-            self._list = [GoTolangArrEle("_", pa=self) if self._ndim == 1 else GoTolangArray(self._dim[1:])
-                          for _ in range(self._dim[0])]
-        except Exception:
-            pass
+        self._ndim = len(dim)
+        self._dim = dim
+        self._list = [GoTolangArrEle("_", pa=self) if self._ndim == 1 else GoTolangArray(self._dim[1:])
+                      for _ in range(self._dim[0])]
 
     def shape(self, dim=-1):
         return self._dim if dim == -1 else self._dim[dim]
@@ -34,6 +27,21 @@ class GoTolangArray:
         if len(idx) == 1:
             return self._list[idx[0]]
         return self._list[idx[0]].get_ele(idx[1:])
+
+    def get_b(self):
+        if self._ndim != 1:
+            raise goTolangArrayDimNotOne(None)
+        return self._list[0]
+
+    def pop_b(self):
+        if self._ndim != 1:
+            raise goTolangArrayDimNotOne(None)
+        self._list.pop(0)
+
+    def push_b(self, value):
+        if self._ndim != 1:
+            raise goTolangArrayDimNotOne(None)
+        self._list.append(value)
 
     @property
     def repr(self):  # for debug

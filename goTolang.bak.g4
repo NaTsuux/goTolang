@@ -2,7 +2,7 @@
 grammar goTolang;
 
 SKIP_
- : ( SPACES | COMMENT ) -> skip
+ : ( SPACES | COMMENT | LINE_JOINING ) -> skip
  ;
 /*
  * parser rules
@@ -28,11 +28,16 @@ label_stmt: '->' NUMBER;
 expr_stmt: testlist_star_expr (annassign | augassign (testlist) | ('=' (testlist_star_expr))*);
 annassign: ':' or_test ('=' or_test)?;
 testlist_star_expr: (or_test|star_expr) (',' (or_test|star_expr))* (',')?;
-augassign: ('+=' | '-=' | '*='  | '/=' | '%=' | '&=' | '|=' | '^=' |
+augassign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
             '<<=' | '>>=' | '**=' | '//=');
 // For normal and annotated assignments, additional restrictions enforced by the interpreter
 pass_stmt: 'pass';
-goback_stmt: 'goback' '<-' NUMBER;
+goback_stmt: 'goback' ;
+raise_stmt: 'raise' (or_test ('from' or_test)?)?;
+
+dotted_as_name: dotted_name ('as' NAME)?;
+dotted_as_names: dotted_as_name (',' dotted_as_name)*;
+dotted_name: NAME ('.' NAME)*;
 
 if_stmt: 'if' NEWLINE '{' NEWLINE ( or_test ':' suite)+ '}'; // suite带NEWLINE，所以NEWLINE放()+里会出奇怪问题
 suite: simple_stmt | NEWLINE stmt+ ;
@@ -41,21 +46,23 @@ or_test: and_test ('or' and_test)*;
 and_test: not_test ('and' not_test)*;
 not_test: 'not' not_test | comparison;
 comparison: expr (comp_op expr)*;
-comp_op: '<'|'>'|'=='|'>='|'<='|'!='|'in'|'not' 'in'|'is'|'is' 'not';
+// <> isn't actually a valid comparison operator in Python. It's here for the
+// sake of a __future__ import described in PEP 401 (which really works :-)
+comp_op: '<'|'>'|'=='|'>='|'<='|'<>'|'!='|'in'|'not' 'in'|'is'|'is' 'not';
 star_expr: '*' expr;
 expr: xor_expr ('|' xor_expr)*;
 xor_expr: and_expr ('^' and_expr)*;
 and_expr: shift_expr ('&' shift_expr)*;
 shift_expr: arith_expr (('<<'|'>>') arith_expr)*;
 arith_expr: term (('+'|'-') term)*;
-term: factor (('*'|'/'|'%'|'//') factor)*;
+term: factor (('*'|'@'|'/'|'%'|'//') factor)*;
 factor: ('+'|'-'|'~') factor | power;
 power: atom_expr ('**' factor)?;
 atom_expr: atom trailer*;
 atom: ('(' (testlist_comp)? ')' |
        '[' (testlist_comp)? ']' |
        'True' | 'False' |
-       NAME | NUMBER | CHAR | '...' | 'None');
+       NAME | NUMBER | STRING+ | '...' | 'None');
 testlist_comp: (or_test|star_expr) ( (',' (or_test|star_expr))* (',')? );
 trailer: '(' (arglist)? ')' | '[' subscriptlist ']' | '.' NAME;
 subscriptlist: subscript (',' subscript)* (',')?;
@@ -63,25 +70,37 @@ subscript: or_test | (or_test)? ':' (or_test)? (sliceop)?;
 sliceop: ':' (or_test)?;
 exprlist: (expr|star_expr) (',' (expr|star_expr))* (',')?;
 testlist: or_test (',' or_test)* (',')?;
+
 arglist: argument (',' argument)*  (',')?;
-argument: or_test;
+
+// The reason that keywords are test nodes instead of NAME is that using NAME
+// results in an ambiguity. ast.c makes sure it's a NAME.
+// "test '=' test" is really "keyword '=' test", but we have no such token.
+// These need to be in a single rule to avoid grammar that is ambiguous
+// to our LL(1) parser. Even though 'test' includes '*expr' in star_expr,
+// we explicitly match '*' here, too, to give it proper precedence.
+// Illegal combinations and orderings are blocked in ast.c:
+// multiple (test comp_for) arguments are blocked; keyword unpackings
+// that precede iterable unpackings are blocked; etc.
+argument: ( or_test |
+            or_test '=' or_test |
+            '**' or_test |
+            '*' or_test );
 
 /*
  * lexer rules
  */
- 
-BOOL_TRUE: 'True';
-BOOL_FALSE: 'False';
-
 DECORATOR: 'NICE' | 'OK' | 'POOR';
 
-CHAR
- : CHAR_LITERAL
+STRING
+ : STRING_LITERAL
+ | BYTES_LITERAL
  ;
 
 NUMBER
  : INTEGER
  | FLOAT_NUMBER
+ | IMAG_NUMBER
  ;
 
 INTEGER
@@ -104,12 +123,19 @@ NEWLINE
  ;
 
 
+BOOL_TRUE: 'True';
+BOOL_FALSE: 'False';
+
 NAME
  : ID_START ID_CONTINUE*
  ;
 
-CHAR_LITERAL
- : SHORT_STRING
+STRING_LITERAL
+ : ( [rR] | [uU] | [fF] | ( [fF] [rR] ) | ( [rR] [fF] ) )? ( SHORT_STRING | LONG_STRING )
+ ;
+
+BYTES_LITERAL
+ : ( [bB] | ( [bB] [rR] ) | ( [rR] [bB] ) ) ( SHORT_BYTES | LONG_BYTES )
  ;
 
 DECIMAL_INTEGER
@@ -134,7 +160,12 @@ FLOAT_NUMBER
  | EXPONENT_FLOAT
  ;
 
+IMAG_NUMBER
+ : ( FLOAT_NUMBER | INT_PART ) [jJ]
+ ;
+
 DOT : '.';
+ELLIPSIS : '...';
 STAR : '*';
 OPEN_PAREN : '(' ;
 CLOSE_PAREN : ')';
@@ -161,13 +192,14 @@ GREATER_THAN : '>';
 EQUALS : '==';
 GT_EQ : '>=';
 LT_EQ : '<=';
+NOT_EQ_1 : '<>';
 NOT_EQ_2 : '!=';
 AT : '@';
 ARROW : '->';
-INV_ARROW: '<-';
 ADD_ASSIGN : '+=';
 SUB_ASSIGN : '-=';
 MULT_ASSIGN : '*=';
+AT_ASSIGN : '@=';
 DIV_ASSIGN : '/=';
 MOD_ASSIGN : '%=';
 AND_ASSIGN : '&=';
@@ -193,6 +225,22 @@ UNKNOWN_CHAR
 fragment SHORT_STRING
  : '\'' ( STRING_ESCAPE_SEQ | ~[\\\r\n\f'] )* '\''
  | '"' ( STRING_ESCAPE_SEQ | ~[\\\r\n\f"] )* '"'
+ ;
+/// longstring      ::=  "'''" longstringitem* "'''" | '"""' longstringitem* '"""'
+fragment LONG_STRING
+ : '\'\'\'' LONG_STRING_ITEM*? '\'\'\''
+ | '"""' LONG_STRING_ITEM*? '"""'
+ ;
+
+/// longstringitem  ::=  longstringchar | stringescapeseq
+fragment LONG_STRING_ITEM
+ : LONG_STRING_CHAR
+ | STRING_ESCAPE_SEQ
+ ;
+
+/// longstringchar  ::=  <any source character except "\">
+fragment LONG_STRING_CHAR
+ : ~'\\'
  ;
 
 /// stringescapeseq ::=  "\" <any source character>
@@ -252,12 +300,63 @@ fragment EXPONENT
  : [eE] [+-]? DIGIT+
  ;
 
+/// shortbytes     ::=  "'" shortbytesitem* "'" | '"' shortbytesitem* '"'
+/// shortbytesitem ::=  shortbyteschar | bytesescapeseq
+fragment SHORT_BYTES
+ : '\'' ( SHORT_BYTES_CHAR_NO_SINGLE_QUOTE | BYTES_ESCAPE_SEQ )* '\''
+ | '"' ( SHORT_BYTES_CHAR_NO_DOUBLE_QUOTE | BYTES_ESCAPE_SEQ )* '"'
+ ;
+
+/// longbytes      ::=  "'''" longbytesitem* "'''" | '"""' longbytesitem* '"""'
+fragment LONG_BYTES
+ : '\'\'\'' LONG_BYTES_ITEM*? '\'\'\''
+ | '"""' LONG_BYTES_ITEM*? '"""'
+ ;
+
+/// longbytesitem  ::=  longbyteschar | bytesescapeseq
+fragment LONG_BYTES_ITEM
+ : LONG_BYTES_CHAR
+ | BYTES_ESCAPE_SEQ
+ ;
+
+/// shortbyteschar ::=  <any ASCII character except "\" or newline or the quote>
+fragment SHORT_BYTES_CHAR_NO_SINGLE_QUOTE
+ : [\u0000-\u0009]
+ | [\u000B-\u000C]
+ | [\u000E-\u0026]
+ | [\u0028-\u005B]
+ | [\u005D-\u007F]
+ ;
+
+fragment SHORT_BYTES_CHAR_NO_DOUBLE_QUOTE
+ : [\u0000-\u0009]
+ | [\u000B-\u000C]
+ | [\u000E-\u0021]
+ | [\u0023-\u005B]
+ | [\u005D-\u007F]
+ ;
+
+/// longbyteschar  ::=  <any ASCII character except "\">
+fragment LONG_BYTES_CHAR
+ : [\u0000-\u005B]
+ | [\u005D-\u007F]
+ ;
+
+/// bytesescapeseq ::=  "\" <any ASCII character>
+fragment BYTES_ESCAPE_SEQ
+ : '\\' [\u0000-\u007F]
+ ;
+
 fragment SPACES
  : [ \t]+
  ;
 
 fragment COMMENT
  : '#' ~[\r\n\f]*
+ ;
+
+fragment LINE_JOINING
+ : '\\' SPACES? ( '\r'? '\n' | '\r' | '\f' )
  ;
 
 /// id_start     ::=  <all characters in general categories Lu, Ll, Lt, Lm, Lo, Nl, the underscore, and characters with the Other_ID_Start property>

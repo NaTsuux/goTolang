@@ -9,7 +9,5 @@ a=a+1
 ->10
 """
 
-
 if __name__ == '__main__':
-    run_file(FileStream("inputs/goto6.txt", 'utf-8'))
-
+    run_file(FileStream("inputs/goto5.txt", 'utf-8'))

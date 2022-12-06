@@ -1,13 +1,16 @@
-class goTolangPreError(BaseException):
-    def __init__(self):
-        pass
+from .baseError import GoTolangBaseError
 
 
-class duplicatedLabelError(goTolangPreError):
-    def __init__(self, label, ctx):
-        pass
-
-
-class longComparisonError(goTolangPreError):
+class GoTolangPreError(GoTolangBaseError):
     def __init__(self, ctx):
-        pass
+        super(GoTolangPreError, self).__init__(ctx)
+
+
+class DuplicatedLabelError(GoTolangPreError):
+    def __init__(self, ctx):
+        super(DuplicatedLabelError, self).__init__(ctx)
+
+
+class LongComparisonError(GoTolangPreError):
+    def __init__(self, ctx):
+        super(LongComparisonError, self).__init__(ctx)

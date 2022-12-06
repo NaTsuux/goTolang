@@ -2,7 +2,6 @@ from mypl.exception import goTolangSymbolCannotCitedError
 
 
 class CtxNode:
-    env = None
 
     def __init__(self, is_ptr, type, value, ctx):
         self.is_ptr = is_ptr
@@ -13,7 +12,6 @@ class CtxNode:
     @property
     def cite(self):
         if not self.is_ptr:
-            # TODO ctx
             raise goTolangSymbolCannotCitedError(self._value, self.ctx)
         return self._value
 

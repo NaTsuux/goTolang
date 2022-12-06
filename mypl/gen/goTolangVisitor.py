@@ -83,22 +83,6 @@ class goTolangVisitor(ParseTreeVisitor):
     def visitGoback_stmt(self, ctx: goTolangParser.Goback_stmtContext):
         return self.visitChildren(ctx)
 
-    # Visit a parse tree produced by goTolangParser#raise_stmt.
-    def visitRaise_stmt(self, ctx: goTolangParser.Raise_stmtContext):
-        return self.visitChildren(ctx)
-
-    # Visit a parse tree produced by goTolangParser#dotted_as_name.
-    def visitDotted_as_name(self, ctx: goTolangParser.Dotted_as_nameContext):
-        return self.visitChildren(ctx)
-
-    # Visit a parse tree produced by goTolangParser#dotted_as_names.
-    def visitDotted_as_names(self, ctx: goTolangParser.Dotted_as_namesContext):
-        return self.visitChildren(ctx)
-
-    # Visit a parse tree produced by goTolangParser#dotted_name.
-    def visitDotted_name(self, ctx: goTolangParser.Dotted_nameContext):
-        return self.visitChildren(ctx)
-
     # Visit a parse tree produced by goTolangParser#if_stmt.
     def visitIf_stmt(self, ctx: goTolangParser.If_stmtContext):
         return self.visitChildren(ctx)

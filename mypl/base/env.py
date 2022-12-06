@@ -1,5 +1,3 @@
-from typing import Union
-
 from mypl.builtin import *
 from mypl.exception import goTolangSymbolNotFoundError
 
@@ -13,8 +11,13 @@ class GoTolangEnv:
             "SHAPE": goTolang_array_shape,
             "NUMIN": goTolang_array_numin,
             "STRIN": goTolang_array_strin,
+            "GETB": goTolang_array_getb,
+            "POPB": goTolang_array_popb,
+            "PUSHB": goTolang_array_pushb,
         })
         self.label_env = {}
+        self.goto_env = {}
+        self.last_goto = {}  # label: ctx
         self.cur_symbol_env = self.symbol_env
 
     def cur_symbol_env_clear(self):
@@ -40,6 +43,24 @@ class GoTolangEnv:
 
     def set_label_path(self, label, path):
         self.label_env[label] = path
+
+    def set_goto_path(self, label, path):
+        if not self.goto_env.get(label):
+            self.goto_env[label] = []
+        self.goto_env[label].append(path)
+
+    def get_last_goto_path(self, label):
+        ctx = self.last_goto.get(label)
+        if ctx is None:
+            raise Exception("No place to goback qaq")
+        for path in self.goto_env[label]:
+            try:
+                if ctx == path[0]:
+                    self.last_goto.pop(label)
+                    return path.copy()
+            except Exception:
+                pass
+        raise Exception("No goto path found")
 
     def get_label_path(self, label):
         if label is None:

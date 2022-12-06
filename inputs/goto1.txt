@@ -1,6 +1,6 @@
 a = 1
 -> 10
-PRINT(a,'\n') # 看g4文件里的trailer规则，(a,'\n')属于该规则
+PRINT(a,'\n\n') # 看g4文件里的trailer规则，(a,'\n')属于该规则
 if
 {
     a<=4: # a共+1
