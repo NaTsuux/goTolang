@@ -123,6 +123,9 @@ NEWLINE
  ;
 
 
+BOOL_TRUE: 'True';
+BOOL_FALSE: 'False';
+
 NAME
  : ID_START ID_CONTINUE*
  ;
@@ -163,8 +166,6 @@ IMAG_NUMBER
 
 DOT : '.';
 ELLIPSIS : '...';
-BOOL_TRUE: 'True';
-BOOL_FALSE: 'False';
 STAR : '*';
 OPEN_PAREN : '(' ;
 CLOSE_PAREN : ')';

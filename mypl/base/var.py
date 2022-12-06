@@ -1,9 +1,9 @@
 from typing import Tuple, Any
 
-from .exception import goTolangSymbolUndefinedError
+from mypl.exception import goTolangSymbolUndefinedError
 
 
-class goTolangVar:
+class GoTolangVar:
 
     def __init__(self, name, type="undefined", value=None, is_const=False):
         self.is_const = is_const
@@ -27,3 +27,12 @@ class goTolangVar:
     @property
     def name(self):
         return self._name
+
+    def __repr__(self):
+        return "<goTolangVar {{name: {}, value: {}}}>".format(self._name, self._value)
+
+
+class GoTolangArrEle(GoTolangVar):
+    def __init__(self, *args, **kwargs):
+        self.pa = kwargs.pop("pa")
+        super(GoTolangArrEle, self).__init__(*args, **kwargs)

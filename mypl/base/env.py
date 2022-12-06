@@ -1,18 +1,24 @@
-from .exception import goTolangSymbolNotFoundError
-from .goTolangVar import goTolangVar
-from .func import goTolang_print
+from typing import Union
+
+from .var import GoTolangVar
+from mypl.exception import goTolangSymbolNotFoundError
+from mypl.builtin import *
 
 
-class goTolangEnv:
+class GoTolangEnv:
     def __init__(self):
         self.symbol_d = {
             "__global": {
-                "PRINT": goTolangVar("PRINT", "builtin func", goTolang_print)
+                "PRINT": goTolang_print,
+                "ARRAY": goTolang_array_init,
+                "SHAPE": goTolang_array_shape,
+                "NUMIN": goTolang_array_numin,
+                "STRIN": goTolang_array_strin,
             }
         }
         self.label_d = {}
 
-    def get_symbol_meta(self, symbol, ctx) -> goTolangVar:
+    def get_symbol_meta(self, symbol, ctx) -> Union[GoTolangVar, GoTolangFunc]:
         # TODO use ctx
         res = self.symbol_d["__global"].get(symbol)
         if res is None:
@@ -44,7 +50,7 @@ class goTolangEnv:
     def set_symbol_init(self, symbol, ctx):
         # TODO use ctx and use object
         if not self.get_symbol_exist(symbol, ctx):
-            self.symbol_d["__global"][symbol] = goTolangVar(symbol)
+            self.symbol_d["__global"][symbol] = GoTolangVar(symbol)
 
     def set_label_path(self, label, path):
         self.label_d[label] = path

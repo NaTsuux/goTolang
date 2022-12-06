@@ -1,12 +1,11 @@
 from antlr4.tree import Tree
 
 from .gen import goTolangVisitor, goTolangParser
-from .exception import *
-from .goTolangEnv import goTolangEnv
+from .exception import duplicatedLabelError, longComparisonError
 
 
 class goTolangPreVisitor(goTolangVisitor):
-    def __init__(self, tree, env: goTolangEnv):
+    def __init__(self, tree, env):
         super().__init__()
         self.root = tree
         self.env = env

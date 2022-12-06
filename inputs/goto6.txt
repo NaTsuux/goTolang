@@ -1,1 +1,3 @@
-PRINT(1)
+a=ARRAY(3)
+STRIN(a[0])
+PRINT(a[1])

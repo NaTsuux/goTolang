@@ -2,7 +2,7 @@
 dim1=ARRAY(100)
 dim2=ARRAY(100,100)
 dim3=ARRAY(100,100,15)
-PRINT(SHAPE(dim3,2)) # dim3第二维大小，输出15
+PRINT(SHAPE(dim3,2), '\n') # dim3第二维大小，输出15
 
 NUMIN(dim3[1,2,3]) # 数组下标是逗号分隔形式
 STRIN(dim1[1]) # 对于字符串读取，传入的是首地址（类似C）
@@ -10,9 +10,9 @@ STRIN(dim2[1,10]) # 二维数组类似C里的scanf("%s", &dim2[1][10]);
 
 PRINT(dim3[1,2,3])
 PRINT(dim1[2])
-PRINT(dim2[1,11])
+PRINT(dim2[1,11], '\n')
 
-# 若输入 
+# 若输入
 # 114514
 # abc
 # 123

@@ -3,7 +3,7 @@ from antlr4 import FileStream, CommonTokenStream
 from .gen import *
 from .goTolangPreVisitor import goTolangPreVisitor
 from .goTolangMainVisitor import goTolangMainVisitor
-from .goTolangEnv import goTolangEnv
+from .base.env import GoTolangEnv
 from .exception import GotoException, goTolangPreError, goTolangRuntimeError
 
 
@@ -12,7 +12,7 @@ def run_file(input_stream: FileStream):
     stream = CommonTokenStream(lexer)
     parser = goTolangParser(stream)
     tree = parser.file_input()
-    env = goTolangEnv()
+    env = GoTolangEnv()
     try:
         goTolangPreVisitor(tree, env).run()
     except goTolangPreError as exc:
@@ -31,4 +31,5 @@ def run_file(input_stream: FileStream):
             print(repr(exc))
             return
 
+    print("==========================")
     print(main_visitor.env)

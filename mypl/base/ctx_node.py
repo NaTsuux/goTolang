@@ -1,4 +1,4 @@
-from .exception import goTolangSymbolCannotCitedError
+from mypl.exception import goTolangSymbolCannotCitedError
 
 
 class CtxNode:

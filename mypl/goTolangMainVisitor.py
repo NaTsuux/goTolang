@@ -3,14 +3,13 @@ from typing import List
 from antlr4.tree import Tree
 
 from .gen import goTolangVisitor, goTolangParser
-from .ctxNode import CtxNode
 from .exception import *
-from .goTolangEnv import goTolangEnv
-from .goTolangVar import goTolangVar
+from .base import GoTolangEnv, GoTolangVar, CtxNode
+from .builtin import GoTolangArray, GoTolangFunc
 
 
 class goTolangMainVisitor(goTolangVisitor):
-    def __init__(self, tree, env: goTolangEnv):
+    def __init__(self, tree, env: GoTolangEnv):
         super().__init__()
         self.root = tree
         self.env = env
@@ -107,19 +106,32 @@ class goTolangMainVisitor(goTolangVisitor):
         atom_ctx_node: CtxNode = atom.accept(self)
         trailer_ctx_nodes: List[CtxNode] = [tailer.accept(self) for tailer in ctx.trailer()]
 
-        if len(trailer_ctx_nodes) == 0:
-            return atom_ctx_node
-
-        atom_ctx_v = atom_ctx_node.value
+        ret = atom_ctx_node
         for trailer_ctx_node in trailer_ctx_nodes:
             if trailer_ctx_node.type == "arg list":
                 # TODO func param check
                 args = trailer_ctx_node.value
-                atom_ctx_v(*[arg.value for arg in args])
+                if not isinstance(ret.value, GoTolangFunc):
+                    raise Exception("Error type")  # TODO
+                ret = ret.value(*(arg.cite if arg.is_ptr else arg.value for arg in args))
+                ret.ctx = ctx
+            elif trailer_ctx_node.type == "sub list":
+                # TODO type check
+                subs = trailer_ctx_node.value
+                if not isinstance(ret.value, GoTolangArray):
+                    raise Exception("Error type")  # TODO
+                ele_ptr = ret.value.get_ele(tuple(sub.value for sub in subs))
+                ret = CtxNode(is_ptr=True, type="arr ele", value=ele_ptr, ctx=ctx)
+
+        return ret
 
     def visitArglist(self, ctx: goTolangParser.ArglistContext):
-        arg_list = [arg_node.accept(self) for arg_node in ctx.argument()]
+        arg_list = tuple(arg_node.accept(self) for arg_node in ctx.argument())
         return CtxNode(is_ptr=False, type="arg list", value=arg_list, ctx=ctx)
+
+    def visitSubscriptlist(self, ctx: goTolangParser.SubscriptlistContext):
+        sub_list = tuple(sub_node.accept(self) for sub_node in ctx.subscript())
+        return CtxNode(is_ptr=False, type="sub list", value=sub_list, ctx=ctx)
 
     def visitAtom(self, ctx: goTolangParser.AtomContext):
         if ctx.OPEN_PAREN() is not None:
