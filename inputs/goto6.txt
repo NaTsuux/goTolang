@@ -1,3 +1,9 @@
-a=ARRAY(3)
-STRIN(a[0])
-PRINT(a[1])
+b=1
+[
+    b=2
+    goto 10
+]
+[
+    -> 10
+    PRINT(b)
+]

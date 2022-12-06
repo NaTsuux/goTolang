@@ -10,7 +10,7 @@
         ]
     
         PRINT(a) # 可以
-        PRINT(c) # 报错
+        # PRINT(c) # 报错
     ]
 
     PRINT(a) # 可以

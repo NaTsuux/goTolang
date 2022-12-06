@@ -6,6 +6,7 @@ from .base import GoTolangEnv, CtxNode
 from .builtin import GoTolangArray, GoTolangFunc
 from .exception import *
 from .gen import goTolangVisitor, goTolangParser
+from .wrapper import change_env
 
 
 class goTolangMainVisitor(goTolangVisitor):
@@ -13,10 +14,11 @@ class goTolangMainVisitor(goTolangVisitor):
         super().__init__()
         self.root = tree
         self.env = env
-        CtxNode.env = env
         self.resume_path = []
+        self.left = False
 
     def run(self, from_label: int):
+        self.env.cur_symbol_env_clear()
         self.resume_path = self.env.get_label_path(from_label)
         node = self.resume_path.pop() if self.resume_path else None
         self.visitChildren(self.root, node)
@@ -69,14 +71,22 @@ class goTolangMainVisitor(goTolangVisitor):
         return left
 
     def visitExpr_stmt(self, ctx: goTolangParser.Expr_stmtContext):
-        left: CtxNode = ctx.testlist_star_expr(0).accept(self)
+        if ctx.getChildCount() == 1:
+            return self.visitChildren(ctx)
+
         if ctx.ASSIGN(0):
+            self.left = True
+            left: CtxNode = ctx.testlist_star_expr(0).accept(self)
+            self.left = False
+
             if not left.is_ptr:
                 raise goTolangSymbolCannotAssignError(left, ctx)
             right: CtxNode = ctx.testlist_star_expr(1).accept(self)
             # TODO 判断类型？
             left.cite.value = (right.type, right.value)
         elif ctx.augassign():
+            left: CtxNode = ctx.testlist_star_expr(0).accept(self)
+
             AUG_ASSIGN: goTolangParser.AugassignContext = ctx.augassign()
             if not left.is_ptr:
                 raise goTolangSymbolCannotAssignError(left, ctx)
@@ -137,10 +147,11 @@ class goTolangMainVisitor(goTolangVisitor):
         if ctx.OPEN_PAREN() is not None:
             return ctx.testlist_comp().accept(self)
         if ctx.NAME():
-            child = ctx.NAME()
-            symbol = child.getText()
+            symbol = ctx.NAME().getText()
 
-            self.env.set_symbol_init(symbol, ctx)
+            # TODO
+            if self.left:
+                self.env.set_symbol_init(symbol, ctx)
 
             symbol_meta = self.env.get_symbol_meta(symbol, ctx)
             ctx_node = CtxNode(is_ptr=True, type="cite", value=symbol_meta, ctx=ctx)
@@ -204,6 +215,7 @@ class goTolangMainVisitor(goTolangVisitor):
         else:
             return self.visitChildren(ctx)
 
+    @change_env
     def visitFile_input_no_eof(self, ctx: goTolangParser.File_input_no_eofContext):
         if self.resume_path:
             node = self.resume_path.pop()

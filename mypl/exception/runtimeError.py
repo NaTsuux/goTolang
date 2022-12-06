@@ -21,3 +21,8 @@ class goTolangSymbolCannotCitedError(goTolangRuntimeError):
 class goTolangSymbolCannotAssignError(goTolangRuntimeError):
     def __init__(self, ctx_node, ctx):
         super(goTolangSymbolCannotAssignError, self).__init__()
+
+
+class goTolangUnboundLocalError(goTolangRuntimeError):
+    def __init__(self, symbol, ctx):
+        super(goTolangUnboundLocalError, self).__init__()

@@ -1,6 +1,6 @@
 from typing import Tuple, Any
 
-from mypl.exception import goTolangSymbolUndefinedError
+from mypl.exception import goTolangUnboundLocalError
 
 
 class GoTolangVar:
@@ -14,7 +14,7 @@ class GoTolangVar:
     @property
     def value(self):
         if self.type == "undefined":
-            raise goTolangSymbolUndefinedError(self.name, None)
+            raise goTolangUnboundLocalError(self.name, None)
         return self._value
 
     @value.setter

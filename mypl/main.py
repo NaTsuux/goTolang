@@ -27,9 +27,8 @@ def run_file(input_stream: FileStream):
             break
         except GotoException as exc:
             from_label = exc.label
-        except goTolangRuntimeError as exc:
-            print(repr(exc))
-            return
+        # except goTolangRuntimeError as exc:
+        #     return
 
-    print("==========================")
+    print("\n==========================")
     print(main_visitor.env)

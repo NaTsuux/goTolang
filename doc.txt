@@ -39,3 +39,7 @@ EOF只能匹配一次
 
 
 getToken的参数i表示返回第i+1个对应类型 如ctx.ASSIGN(1)返回第2个ASSIGN！
+a=1
+[
+    a=a+1
+]   # 报错
