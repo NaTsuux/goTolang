@@ -228,7 +228,7 @@ class goTolangLexer(Lexer):
     BOOL_TRUE = 11
     BOOL_FALSE = 12
     DECORATOR = 13
-    CHAR = 14
+    STRING = 14
     NUMBER = 15
     INTEGER = 16
     IF = 17
@@ -238,7 +238,7 @@ class goTolangLexer(Lexer):
     PASS = 21
     NEWLINE = 22
     NAME = 23
-    CHAR_LITERAL = 24
+    STRING_LITERAL = 24
     DECIMAL_INTEGER = 25
     OCT_INTEGER = 26
     HEX_INTEGER = 27
@@ -304,9 +304,9 @@ class goTolangLexer(Lexer):
                     "'>>='", "'**='", "'//='"]
 
     symbolicNames = ["<INVALID>",
-                     "SKIP_", "BOOL_TRUE", "BOOL_FALSE", "DECORATOR", "CHAR", "NUMBER",
+                     "SKIP_", "BOOL_TRUE", "BOOL_FALSE", "DECORATOR", "STRING", "NUMBER",
                      "INTEGER", "IF", "OR", "AND", "NOT", "PASS", "NEWLINE", "NAME",
-                     "CHAR_LITERAL", "DECIMAL_INTEGER", "OCT_INTEGER", "HEX_INTEGER",
+                     "STRING_LITERAL", "DECIMAL_INTEGER", "OCT_INTEGER", "HEX_INTEGER",
                      "BIN_INTEGER", "FLOAT_NUMBER", "DOT", "STAR", "OPEN_PAREN",
                      "CLOSE_PAREN", "COMMA", "COLON", "SEMI_COLON", "POWER", "ASSIGN",
                      "OPEN_BRACK", "CLOSE_BRACK", "OR_OP", "XOR", "AND_OP", "LEFT_SHIFT",
@@ -319,8 +319,8 @@ class goTolangLexer(Lexer):
 
     ruleNames = ["T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6",
                  "T__7", "T__8", "SKIP_", "BOOL_TRUE", "BOOL_FALSE", "DECORATOR",
-                 "CHAR", "NUMBER", "INTEGER", "IF", "OR", "AND", "NOT",
-                 "PASS", "NEWLINE", "NAME", "CHAR_LITERAL", "DECIMAL_INTEGER",
+                 "STRING", "NUMBER", "INTEGER", "IF", "OR", "AND", "NOT",
+                 "PASS", "NEWLINE", "NAME", "STRING_LITERAL", "DECIMAL_INTEGER",
                  "OCT_INTEGER", "HEX_INTEGER", "BIN_INTEGER", "FLOAT_NUMBER",
                  "DOT", "STAR", "OPEN_PAREN", "CLOSE_PAREN", "COMMA", "COLON",
                  "SEMI_COLON", "POWER", "ASSIGN", "OPEN_BRACK", "CLOSE_BRACK",

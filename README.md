@@ -5,7 +5,6 @@
 为了满足被偶像Dijkstra跨时空辱骂（以及大作业）的需求，
 我们设计了goTolang（逃
 
-
 不觉得这很酷吗？利用宇宙语言python做解释器开倒车（指实现goto），
 作为一个程序员我觉得这太酷了，很符合我对烟酒僧大作业的想象（
 
@@ -14,6 +13,7 @@
 **gOtOlang**, **gOTOlang**, **g**:wheelchair:**T**:wheelchair:**lang**
 
 ### 使用样例
+
 ```
 -> 10
 PRINT('%', '%', '%')

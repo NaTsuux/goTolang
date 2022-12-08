@@ -1,7 +1,39 @@
-stack = ARRAY(0)
-PUSHB(stack, 1)
-PRINT(stack[0])
-x=GETB(stack)
-PRINT(x)
-POPB(stack)
+# 递归求输入两个数字的gcd（辗转相除）
+# 输入： 12 30
+stack=ARRAY(0)
 
+goto 10
+
+gcd_called=0
+-> 20
+gcd_called+=1
+@OK
+[
+    Y=GETB(stack)
+    POPB(stack)
+    X=GETB(stack)
+    POPB(stack)
+    PRINT('debug info : gcd_called = ', gcd_called,' | X = ', X,' | Y = ', Y, '\n')
+    
+    r=X%Y
+    goif{r==0} 30
+    PUSHB(stack,Y)
+    PUSHB(stack,r)
+    goto 20
+    goback <- 20
+
+    -> 30
+    PUSHB(stack, Y)
+    goback <- 20
+]
+
+-> 10
+X=0
+Y=0
+NUMIN(X)
+NUMIN(Y)
+gcd_called = 0
+PUSHB(stack,X)
+PUSHB(stack,Y)
+goto 20
+goto 10

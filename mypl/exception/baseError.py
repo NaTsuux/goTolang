@@ -3,8 +3,9 @@ from mypl import goTolangParser
 
 class GoTolangBaseError(BaseException):
     def __init__(self, ctx):
-        while not isinstance(ctx, goTolangParser.Simple_stmtContext):
-            ctx = ctx.parentCtx
+        if ctx:
+            while not isinstance(ctx, goTolangParser.Simple_stmtContext):
+                ctx = ctx.parentCtx
         self.ctx = ctx
 
     def __repr__(self):

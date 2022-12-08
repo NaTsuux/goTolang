@@ -1,2 +1,2 @@
-from .array import GoTolangArray
+from .array import GoTolangArrayBase
 from .func import *

@@ -1,36 +1,41 @@
 from .baseError import GoTolangBaseError
 
 
-class goTolangRuntimeError(GoTolangBaseError):
+class GoTolangRuntimeError(GoTolangBaseError):
     def __init__(self, ctx):
-        super(goTolangRuntimeError, self).__init__(ctx)
+        super(GoTolangRuntimeError, self).__init__(ctx)
 
 
-class goTolangSymbolNotFoundError(goTolangRuntimeError):
+class GoTolangSymbolNotFoundError(GoTolangRuntimeError):
     def __init__(self, symbol, ctx):
-        super(goTolangSymbolNotFoundError, self).__init__(ctx)
+        super(GoTolangSymbolNotFoundError, self).__init__(ctx)
 
 
-class goTolangSymbolUndefinedError(goTolangRuntimeError):
+class GoTolangSymbolUndefinedError(GoTolangRuntimeError):
     def __init__(self, symbol, ctx):
-        super(goTolangSymbolUndefinedError, self).__init__(ctx)
+        super(GoTolangSymbolUndefinedError, self).__init__(ctx)
 
 
-class goTolangSymbolCannotCitedError(goTolangRuntimeError):
+class GoTolangSymbolCannotCitedError(GoTolangRuntimeError):
     def __init__(self, symbol, ctx):
-        super(goTolangSymbolCannotCitedError, self).__init__(ctx)
+        super(GoTolangSymbolCannotCitedError, self).__init__(ctx)
 
 
-class goTolangSymbolCannotAssignError(goTolangRuntimeError):
+class GoTolangSymbolCannotAssignError(GoTolangRuntimeError):
     def __init__(self, ctx_node, ctx):
-        super(goTolangSymbolCannotAssignError, self).__init__(ctx)
+        super(GoTolangSymbolCannotAssignError, self).__init__(ctx)
 
 
-class goTolangUnboundLocalError(goTolangRuntimeError):
+class GoTolangUnboundLocalError(GoTolangRuntimeError):
     def __init__(self, symbol, ctx):
-        super(goTolangUnboundLocalError, self).__init__(ctx)
+        super(GoTolangUnboundLocalError, self).__init__(ctx)
 
 
-class goTolangArrayDimNotOne(goTolangRuntimeError):
+class GoTolangFuncTypeError(GoTolangRuntimeError):
     def __init__(self, ctx):
-        super(goTolangArrayDimNotOne, self).__init__(ctx)
+        super(GoTolangFuncTypeError, self).__init__(ctx)
+
+
+class GoTolangRedunGobackError(GoTolangRuntimeError):
+    def __init__(self, ctx):
+        super(GoTolangRedunGobackError, self).__init__(ctx)

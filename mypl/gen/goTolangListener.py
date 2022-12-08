@@ -114,14 +114,6 @@ class goTolangListener(ParseTreeListener):
     def exitExpr_stmt(self, ctx: goTolangParser.Expr_stmtContext):
         pass
 
-    # Enter a parse tree produced by goTolangParser#annassign.
-    def enterAnnassign(self, ctx: goTolangParser.AnnassignContext):
-        pass
-
-    # Exit a parse tree produced by goTolangParser#annassign.
-    def exitAnnassign(self, ctx: goTolangParser.AnnassignContext):
-        pass
-
     # Enter a parse tree produced by goTolangParser#testlist_star_expr.
     def enterTestlist_star_expr(self, ctx: goTolangParser.Testlist_star_exprContext):
         pass
@@ -208,14 +200,6 @@ class goTolangListener(ParseTreeListener):
 
     # Exit a parse tree produced by goTolangParser#comp_op.
     def exitComp_op(self, ctx: goTolangParser.Comp_opContext):
-        pass
-
-    # Enter a parse tree produced by goTolangParser#star_expr.
-    def enterStar_expr(self, ctx: goTolangParser.Star_exprContext):
-        pass
-
-    # Exit a parse tree produced by goTolangParser#star_expr.
-    def exitStar_expr(self, ctx: goTolangParser.Star_exprContext):
         pass
 
     # Enter a parse tree produced by goTolangParser#expr.
@@ -322,30 +306,6 @@ class goTolangListener(ParseTreeListener):
     def exitSubscriptlist(self, ctx: goTolangParser.SubscriptlistContext):
         pass
 
-    # Enter a parse tree produced by goTolangParser#subscript.
-    def enterSubscript(self, ctx: goTolangParser.SubscriptContext):
-        pass
-
-    # Exit a parse tree produced by goTolangParser#subscript.
-    def exitSubscript(self, ctx: goTolangParser.SubscriptContext):
-        pass
-
-    # Enter a parse tree produced by goTolangParser#sliceop.
-    def enterSliceop(self, ctx: goTolangParser.SliceopContext):
-        pass
-
-    # Exit a parse tree produced by goTolangParser#sliceop.
-    def exitSliceop(self, ctx: goTolangParser.SliceopContext):
-        pass
-
-    # Enter a parse tree produced by goTolangParser#exprlist.
-    def enterExprlist(self, ctx: goTolangParser.ExprlistContext):
-        pass
-
-    # Exit a parse tree produced by goTolangParser#exprlist.
-    def exitExprlist(self, ctx: goTolangParser.ExprlistContext):
-        pass
-
     # Enter a parse tree produced by goTolangParser#testlist.
     def enterTestlist(self, ctx: goTolangParser.TestlistContext):
         pass
@@ -360,6 +320,14 @@ class goTolangListener(ParseTreeListener):
 
     # Exit a parse tree produced by goTolangParser#arglist.
     def exitArglist(self, ctx: goTolangParser.ArglistContext):
+        pass
+
+    # Enter a parse tree produced by goTolangParser#subscript.
+    def enterSubscript(self, ctx: goTolangParser.SubscriptContext):
+        pass
+
+    # Exit a parse tree produced by goTolangParser#subscript.
+    def exitSubscript(self, ctx: goTolangParser.SubscriptContext):
         pass
 
     # Enter a parse tree produced by goTolangParser#argument.

@@ -14,16 +14,19 @@ EOF只能匹配一次
     控制流：goto goif(见goto0的例子) if(见goto1的例子) goback(goto回最近一次goto的语句位置)
     常量（同py语法，用于条件）：True False
     运算（同py语法，用于条件）：and or not
-    修饰(都见下)：NICE OK POOR 
-    类似函数（见例子）：ARRAY PUSHF PUSHB POPF POPB GETF GETB SHAPE NUMIN STRIN PRINT 
+    修饰(都见下)：NICE OK POOR
+    类似函数（见例子）：ARRAY PUSHF PUSHB POPF POPB GETF GETB SHAPE NUMIN STRIN PRINT GETEPS SETEPS
         ARRAY(x1,x2...) 声明一个任意维度数组，若数组是一维的，则可以使用上面PUSHF~GETF的六个函数
             PUSHF PUSHB POPF POPB GETF GETB 是将一维ARRAY视作双端队列，因此可以在头尾两段添加、删除、获取元素，POPX无返回值、GETX有返回值
             SHAPE(ARR, x) 返回ARR数组第x维度的大小
         NUMIN(x) 读入一个数字到x中
         STRIN(Arr[x]) 读入一个字符串到以 Arr[x] 开始的一段内存空间中，如STRIN(Arr[3])读入 'abc' 则将存入 Arr[3]~Arr[5] 中
         PRINT(x) 输出x，x只能是数字或单个字符（输出字符串？用循环一个个输出捏）
+        GETEPS SETEPS 当两个数字进行整数运算时（如位运算、取模运算、//运算），会先将数字四舍五入转化为整数再运算，
+            而系统中有一变量EPS，默认为1e-3，若四舍五入前后变化超过了EPS，则报一条warning。GETEPS用于获取EPS值，SETEPS用于设定EPS值
 
 
+基本存储类型为数字（浮点）和字符，但支持一些字符串语法，如支持将字面量赋给数组开始连续的一段（a[2,3]="bcd"表示将bcd存入a[2,3]~a[2,5]中），STRIN(a[2,3])为读入且同理
 数组元素可以不同类型（字符或数字）
 全局不允许任何的label重复
 语句用NEWLINE分割（即语句、"["、"]"、"{"、"}"必须占一行），但不强制缩进，允许有多余空行
@@ -36,10 +39,3 @@ EOF只能匹配一次
         块内没有指向块外的goto
     @POOR:
         有指向块外的goto
-
-
-getToken的参数i表示返回第i+1个对应类型 如ctx.ASSIGN(1)返回第2个ASSIGN！
-a=1
-[
-    a=a+1
-]   # 报错

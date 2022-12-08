@@ -1,5 +1,7 @@
+from typing import List
+
 from mypl.builtin import *
-from mypl.exception import goTolangSymbolNotFoundError
+from mypl.exception import GoTolangSymbolNotFoundError, GoTolangRedunGobackError
 
 
 class GoTolangEnv:
@@ -9,7 +11,7 @@ class GoTolangEnv:
             "PRINT": goTolang_print,
             "ARRAY": goTolang_array_init,
             "SHAPE": goTolang_array_shape,
-            "NUMIN": goTolang_array_numin,
+            "NUMIN": goTolang_numin,
             "STRIN": goTolang_array_strin,
             "GETB": goTolang_array_getb,
             "POPB": goTolang_array_popb,
@@ -17,7 +19,7 @@ class GoTolangEnv:
         })
         self.label_env = {}
         self.goto_env = {}
-        self.last_goto = {}  # label: ctx
+        self.last_goto = {}  # label: [ctx, ...]
         self.cur_symbol_env = self.symbol_env
 
     def cur_symbol_env_clear(self):
@@ -51,15 +53,12 @@ class GoTolangEnv:
 
     def get_last_goto_path(self, label):
         ctx = self.last_goto.get(label)
-        if ctx is None:
-            raise Exception("No place to goback qaq")
+        if not ctx:
+            raise GoTolangRedunGobackError(None)
+        ctx: List = ctx.pop(0)
         for path in self.goto_env[label]:
-            try:
-                if ctx == path[0]:
-                    self.last_goto.pop(label)
-                    return path.copy()
-            except Exception:
-                pass
+            if ctx == path[0]:
+                return path.copy()
         raise Exception("No goto path found")
 
     def get_label_path(self, label):
@@ -86,7 +85,7 @@ class GoTolangSymbolEnv:
         if res is not None:
             return res
         if self.is_root:
-            raise goTolangSymbolNotFoundError(symbol, ctx)
+            raise GoTolangSymbolNotFoundError(symbol, ctx)
         return self.parent.get_symbol_meta(symbol, ctx)
 
     def get_symbol_exist(self, symbol, ctx):

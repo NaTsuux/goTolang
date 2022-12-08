@@ -1,0 +1,12 @@
+a=2
+b=3
+c=4
+c=a+b*c+(a==b)+(a<b)+(a>b)
+PRINT(c)
+a=0
+b=1
+PRINT(a and b)
+PRINT(a or b)
+PRINT(a^b)
+goif {a=b+c} 10 # 这个我试了会在antlr解析时就报错，不过最好也处理一下（指改成自己的报错信息）
+->10

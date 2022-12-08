@@ -1,0 +1,51 @@
+# 创建二维数组mp并赋值，使得其[1,1]到[3,3]的3*3区域为
+# ABC
+# DEF
+#  _\n (三个字符，空格下换线换行)
+# 输入1~9，输出上面的第1~9个字符
+# 本文件旨在检查：字符串赋值与输出的实现、//与%这些与整数有关的运算、取下标运算、if嵌套实现的正确性、SETEPS()与GETEPS()系统函数
+
+# 输入用例： 1~9的整数、任意浮点数（覆盖触发EPS warning与不触发的情况）、字符串（读入时报错）
+
+mp=ARRAY(100,100)
+mp[1,1]='ABC'
+mp[2,1]='123'
+mp[3,1]=" _\n"
+mp[4,98]="PPP" # 由于超出数组长度，会报错，注释掉这句才能正常运行程序
+
+PRINT(GETEPS())
+SETEPS(0.1)
+PRINT(GETEPS())
+
+-> 10
+@NICE
+[
+    NUMIN(x)
+    if
+    {
+        (x-1)//3 < 1: # 在第一行
+            PRINT("a english letter: ")
+            PRINT(mp[(x-1)//3, x%3])
+            if
+            {
+                x%3==1:
+                    PRINT('A')
+                x%3==2:
+                    PRINT('B')
+                x%3==3:
+                    PRINT('C')
+            }
+            PRINT('\n')
+        (x-1)//3 < 2: # 在第二行
+            PRINT("a english letter: ")
+            PRINT(mp[(x-1)//3, x%3])
+            PRINT('\n')
+        (x-1)//3 < 3: # 在第三行
+            PRINT("a english letter: ")
+            PRINT(mp[(x-1)//3, x%3])
+            PRINT('\n')
+        True:
+            PRINT("you should input an interger in [1,9]\n")
+    }
+]
+goto 10

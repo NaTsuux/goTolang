@@ -33,6 +33,7 @@ class goTolangPreVisitor(goTolangVisitor):
             path.append(ctx)
             ctx = ctx.parentCtx
         self.env.set_goto_path(label, path)
+        self.env.last_goto[label] = []
 
     def visitBif(self, ctx: goTolangParser.BifContext):
         label = int(ctx.NUMBER().getText())
@@ -41,6 +42,7 @@ class goTolangPreVisitor(goTolangVisitor):
             path.append(ctx)
             ctx = ctx.parentCtx
         self.env.set_goto_path(label, path)
+        self.env.last_goto[label] = []
 
     def visitComparison(self, ctx: goTolangParser.ComparisonContext):
         if len(ctx.comp_op()) > 1:

@@ -13,6 +13,7 @@ file_input_no_eof: (NEWLINE | stmt | ('@' DECORATOR NEWLINE)? '[' file_input_no_
 
 stmt: simple_stmt
     | if_stmt
+    | NEWLINE
     ;
 simple_stmt: small_stmt NEWLINE;
 small_stmt: expr_stmt # Bexpr
@@ -25,9 +26,8 @@ goto_stmt: 'goto' NUMBER # Bto
             | 'goif' '{'or_test '}' NUMBER # Bif
             ;
 label_stmt: '->' NUMBER;
-expr_stmt: testlist_star_expr (annassign | augassign (testlist) | ('=' (testlist_star_expr))*);
-annassign: ':' or_test ('=' or_test)?;
-testlist_star_expr: (or_test|star_expr) (',' (or_test|star_expr))* (',')?;
+expr_stmt: testlist_star_expr (augassign (testlist) | ('=' (testlist_star_expr))*);
+testlist_star_expr: or_test (',' or_test)* (',')?;
 augassign: ('+=' | '-=' | '*='  | '/=' | '%=' | '&=' | '|=' | '^=' |
             '<<=' | '>>=' | '**=' | '//=');
 // For normal and annotated assignments, additional restrictions enforced by the interpreter
@@ -42,7 +42,6 @@ and_test: not_test ('and' not_test)*;
 not_test: 'not' not_test | comparison;
 comparison: expr (comp_op expr)*;
 comp_op: '<'|'>'|'=='|'>='|'<='|'!='|'in'|'not' 'in'|'is'|'is' 'not';
-star_expr: '*' expr;
 expr: xor_expr ('|' xor_expr)*;
 xor_expr: and_expr ('^' and_expr)*;
 and_expr: shift_expr ('&' shift_expr)*;
@@ -55,28 +54,26 @@ atom_expr: atom trailer*;
 atom: ('(' (testlist_comp)? ')' |
        '[' (testlist_comp)? ']' |
        'True' | 'False' |
-       NAME | NUMBER | CHAR | '...' | 'None');
-testlist_comp: (or_test|star_expr) ( (',' (or_test|star_expr))* (',')? );
+       NAME | NUMBER | STRING | '...' | 'None');
+testlist_comp: or_test ( (',' or_test)* (',')? );
 trailer: '(' (arglist)? ')' | '[' subscriptlist ']' | '.' NAME;
 subscriptlist: subscript (',' subscript)* (',')?;
-subscript: or_test | (or_test)? ':' (or_test)? (sliceop)?;
-sliceop: ':' (or_test)?;
-exprlist: (expr|star_expr) (',' (expr|star_expr))* (',')?;
 testlist: or_test (',' or_test)* (',')?;
 arglist: argument (',' argument)*  (',')?;
+subscript: or_test;
 argument: or_test;
 
 /*
  * lexer rules
  */
- 
+
 BOOL_TRUE: 'True';
 BOOL_FALSE: 'False';
 
 DECORATOR: 'NICE' | 'OK' | 'POOR';
 
-CHAR
- : CHAR_LITERAL
+STRING
+ : STRING_LITERAL
  ;
 
 NUMBER
@@ -108,7 +105,7 @@ NAME
  : ID_START ID_CONTINUE*
  ;
 
-CHAR_LITERAL
+STRING_LITERAL
  : SHORT_STRING
  ;
 

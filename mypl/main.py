@@ -1,7 +1,7 @@
 from antlr4 import FileStream, CommonTokenStream
 
 from .base.env import GoTolangEnv
-from .exception import GotoException, GoTolangPreError, goTolangRuntimeError
+from .exception import GotoException, GoTolangPreError, GoTolangRuntimeError
 from .exception.gotoException import GobackException
 from .gen import *
 from .goTolangMainVisitor import goTolangMainVisitor
@@ -30,7 +30,7 @@ def run_file(input_stream: FileStream):
             label = (exc.label, None)
         except GobackException as exc:
             label = (None, exc.label)
-        except goTolangRuntimeError as exc:
+        except GoTolangRuntimeError as exc:
             print(exc.__repr__())
             return
 

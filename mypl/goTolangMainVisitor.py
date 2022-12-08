@@ -3,11 +3,11 @@ from typing import List
 from antlr4.tree import Tree
 
 from .base import GoTolangEnv, CtxNode
-from .builtin import GoTolangArray, GoTolangFunc
+from .builtin import GoTolangArrayBase, GoTolangFunc
 from .exception import *
 from .exception.gotoException import GobackException
 from .gen import goTolangVisitor, goTolangParser
-from .wrapper import change_env
+from .wrapper import change_env, goto_resume
 
 
 class goTolangMainVisitor(goTolangVisitor):
@@ -22,10 +22,12 @@ class goTolangMainVisitor(goTolangVisitor):
         self.env.cur_symbol_env_clear()
         if not to_label and not back_label:
             return self.visitChildren(self.root)
+
         if to_label:
             self.resume_path = self.env.get_label_path(to_label)
         elif back_label:
             self.resume_path = self.env.get_last_goto_path(back_label)
+
         node = self.resume_path.pop()
         return self.visitChildren(self.root, node)
 
@@ -92,7 +94,7 @@ class goTolangMainVisitor(goTolangVisitor):
             self.left = False
 
             if not left.is_ptr:
-                raise goTolangSymbolCannotAssignError(left, ctx)
+                raise GoTolangSymbolCannotAssignError(left, ctx)
             right: CtxNode = ctx.testlist_star_expr(1).accept(self)
             # TODO 判断类型？
             left.cite.value = (right.type, right.value)
@@ -101,7 +103,7 @@ class goTolangMainVisitor(goTolangVisitor):
 
             AUG_ASSIGN: goTolangParser.AugassignContext = ctx.augassign()
             if not left.is_ptr:
-                raise goTolangSymbolCannotAssignError(left, ctx)
+                raise GoTolangSymbolCannotAssignError(left, ctx)
             right: CtxNode = ctx.testlist().accept(self)
             if AUG_ASSIGN.ADD_ASSIGN():
                 left.cite.value = (left.cite.type, left.value + right.value)
@@ -117,14 +119,14 @@ class goTolangMainVisitor(goTolangVisitor):
 
     def visitBto(self, ctx: goTolangParser.BtoContext):
         label = int(ctx.NUMBER().getText())
-        self.env.last_goto[label] = ctx
+        self.env.last_goto[label].append(ctx)
         raise GotoException(label)
 
     def visitBif(self, ctx: goTolangParser.BifContext):
         label = int(ctx.NUMBER().getText())
         cond: CtxNode = ctx.or_test().accept(self)
         if cond.value:
-            self.env.last_goto[label] = ctx
+            self.env.last_goto[label].append(ctx)
             raise GotoException(label)
         else:
             return None
@@ -143,17 +145,17 @@ class goTolangMainVisitor(goTolangVisitor):
                     raise Exception("Error type")  # TODO
                 try:
                     ret = ret.value(*(arg.cite if arg.is_ptr else arg.value for arg in args))
-                except goTolangRuntimeError as exc:
+                except GoTolangRuntimeError as exc:
                     exc.ctx = ctx
                     raise exc
                 ret.ctx = ctx
             elif trailer_ctx_node.type == "sub list":
                 # TODO type check
                 subs = trailer_ctx_node.value
-                if not isinstance(ret.value, GoTolangArray):
+                if not isinstance(ret.value, GoTolangArrayBase):
                     raise Exception("Error type")  # TODO
                 ele_ptr = ret.value.get_ele(tuple(sub.value for sub in subs))
-                ret = CtxNode(is_ptr=True, type="arr ele", value=ele_ptr, ctx=ctx)
+                ret = CtxNode(is_ptr=True, type="ele ele", value=ele_ptr, ctx=ctx)
 
         return ret
 
@@ -180,8 +182,8 @@ class goTolangMainVisitor(goTolangVisitor):
         elif ctx.NUMBER():
             child = ctx.NUMBER()
             ctx_node = CtxNode(is_ptr=False, type="int", value=int(child.getText()), ctx=ctx)
-        elif ctx.CHAR():
-            child = ctx.CHAR()
+        elif ctx.STRING():
+            child = ctx.STRING()
             ctx_node = CtxNode(is_ptr=False, type="str", value=eval(child.getText()), ctx=ctx)
         elif ctx.BOOL_TRUE():
             ctx_node = CtxNode(is_ptr=False, type="bool", value=True, ctx=ctx)
@@ -227,52 +229,31 @@ class goTolangMainVisitor(goTolangVisitor):
 
         return result
 
+    @goto_resume
     def visitFile_input(self, ctx: goTolangParser.File_inputContext):
-        if self.resume_path:
-            node = self.resume_path.pop()
-            return self.visitChildren(ctx, node)
-        else:
-            return self.visitChildren(ctx)
+        pass
 
     @change_env
+    @goto_resume
     def visitFile_input_no_eof(self, ctx: goTolangParser.File_input_no_eofContext):
-        if self.resume_path:
-            node = self.resume_path.pop()
-            return self.visitChildren(ctx, node)
-        else:
-            return self.visitChildren(ctx)
+        pass
 
+    @goto_resume
     def visitStmt(self, ctx: goTolangParser.StmtContext):
-        if self.resume_path:
-            node = self.resume_path.pop()
-            return self.visitChildren(ctx, node)
-        else:
-            return self.visitChildren(ctx)
+        pass
 
+    @goto_resume
     def visitSuite(self, ctx: goTolangParser.SuiteContext):
-        if self.resume_path:
-            node = self.resume_path.pop()
-            return self.visitChildren(ctx, node)
-        else:
-            return self.visitChildren(ctx)
+        pass
 
+    @goto_resume
     def visitSimple_stmt(self, ctx: goTolangParser.Simple_stmtContext):
-        if self.resume_path:
-            node = self.resume_path.pop()
-            return self.visitChildren(ctx, node)
-        else:
-            return self.visitChildren(ctx)
+        pass
 
+    @goto_resume
     def visitBlabel(self, ctx: goTolangParser.BlabelContext):
-        if self.resume_path:
-            node = self.resume_path.pop()
-            return self.visitChildren(ctx, node)
-        else:
-            return self.visitChildren(ctx)
+        pass
 
+    @goto_resume
     def visitBgoto(self, ctx: goTolangParser.BgotoContext):
-        if self.resume_path:
-            node = self.resume_path.pop()
-            return None  # 不许执行
-        else:
-            return self.visitChildren(ctx)
+        pass

@@ -63,10 +63,6 @@ class goTolangVisitor(ParseTreeVisitor):
     def visitExpr_stmt(self, ctx: goTolangParser.Expr_stmtContext):
         return self.visitChildren(ctx)
 
-    # Visit a parse tree produced by goTolangParser#annassign.
-    def visitAnnassign(self, ctx: goTolangParser.AnnassignContext):
-        return self.visitChildren(ctx)
-
     # Visit a parse tree produced by goTolangParser#testlist_star_expr.
     def visitTestlist_star_expr(self, ctx: goTolangParser.Testlist_star_exprContext):
         return self.visitChildren(ctx)
@@ -109,10 +105,6 @@ class goTolangVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by goTolangParser#comp_op.
     def visitComp_op(self, ctx: goTolangParser.Comp_opContext):
-        return self.visitChildren(ctx)
-
-    # Visit a parse tree produced by goTolangParser#star_expr.
-    def visitStar_expr(self, ctx: goTolangParser.Star_exprContext):
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by goTolangParser#expr.
@@ -167,24 +159,16 @@ class goTolangVisitor(ParseTreeVisitor):
     def visitSubscriptlist(self, ctx: goTolangParser.SubscriptlistContext):
         return self.visitChildren(ctx)
 
-    # Visit a parse tree produced by goTolangParser#subscript.
-    def visitSubscript(self, ctx: goTolangParser.SubscriptContext):
-        return self.visitChildren(ctx)
-
-    # Visit a parse tree produced by goTolangParser#sliceop.
-    def visitSliceop(self, ctx: goTolangParser.SliceopContext):
-        return self.visitChildren(ctx)
-
-    # Visit a parse tree produced by goTolangParser#exprlist.
-    def visitExprlist(self, ctx: goTolangParser.ExprlistContext):
-        return self.visitChildren(ctx)
-
     # Visit a parse tree produced by goTolangParser#testlist.
     def visitTestlist(self, ctx: goTolangParser.TestlistContext):
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by goTolangParser#arglist.
     def visitArglist(self, ctx: goTolangParser.ArglistContext):
+        return self.visitChildren(ctx)
+
+    # Visit a parse tree produced by goTolangParser#subscript.
+    def visitSubscript(self, ctx: goTolangParser.SubscriptContext):
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by goTolangParser#argument.

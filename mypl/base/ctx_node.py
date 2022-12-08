@@ -1,4 +1,4 @@
-from mypl.exception import goTolangSymbolCannotCitedError
+from mypl.exception import GoTolangSymbolCannotCitedError
 
 
 class CtxNode:
@@ -12,7 +12,7 @@ class CtxNode:
     @property
     def cite(self):
         if not self.is_ptr:
-            raise goTolangSymbolCannotCitedError(self._value, self.ctx)
+            raise GoTolangSymbolCannotCitedError(self._value, self.ctx)
         return self._value
 
     @property
