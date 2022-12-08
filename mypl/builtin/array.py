@@ -2,6 +2,7 @@ from abc import abstractmethod
 from typing import Tuple
 
 from mypl.base.var import GoTolangArrEle
+from mypl.exception.runtimeError import GoTolangArrayOutOfIndexError
 
 
 class GoTolangArrayBase:
@@ -17,14 +18,16 @@ class GoTolangArrayBase:
 
     def get_ele(self, idx: Tuple):
         if len(idx) == 1:
-            return self._list[idx[0]]
-        return self._list[idx[0]].get_ele(idx[1:])
+            if self._dim[0] < int(idx[0]):
+                raise GoTolangArrayOutOfIndexError(None)
+            return self._list[int(idx[0])]
+        return self._list[int(idx[0])].get_ele(idx[1:])
 
     def assign_str(self, string, begin):
         idx = self._list.index(begin)
         n = len(string)
         if self._dim[0] < idx + n:
-            raise Exception()  # TODO out of index
+            raise GoTolangArrayOutOfIndexError(None)
         for i in range(n):
             self._list[idx + i].value = ("char", string[i])
 

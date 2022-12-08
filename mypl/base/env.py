@@ -1,26 +1,50 @@
+import math
 from typing import List
 
 from mypl.builtin import *
 from mypl.exception import GoTolangSymbolNotFoundError, GoTolangRedunGobackError
+from .var import GoTolangVar
 
 
 class GoTolangEnv:
+    EPS = 1e-6
+
+    @classmethod
+    def _set_eps(cls, value):
+        if isinstance(value, GoTolangVar):
+            value = value.value
+        cls.EPS = value
+        return 0
+
+    @classmethod
+    def _get_eps(cls):
+        return cls.EPS
+
     def __init__(self):
         self.symbol_env = GoTolangSymbolEnv(self)
         self.symbol_env.symbol_d.update({
             "PRINT": goTolang_print,
+            "NUMIN": goTolang_numin,
             "ARRAY": goTolang_array_init,
             "SHAPE": goTolang_array_shape,
-            "NUMIN": goTolang_numin,
             "STRIN": goTolang_array_strin,
             "GETB": goTolang_array_getb,
             "POPB": goTolang_array_popb,
             "PUSHB": goTolang_array_pushb,
+            "SETEPS": GoTolangFunc(GoTolangEnv._set_eps),
+            "GETEPS": GoTolangFunc(GoTolangEnv._get_eps),
+            "DOGE": goTolang_doge,
         })
         self.label_env = {}
         self.goto_env = {}
         self.last_goto = {}  # label: [ctx, ...]
         self.cur_symbol_env = self.symbol_env
+
+    def floor(self, value: float, ctx) -> int:
+        res = math.floor(value)
+        if value - res > self.EPS:
+            print("Warning eps")  # TODO
+        return res
 
     def cur_symbol_env_clear(self):
         self.cur_symbol_env = self.symbol_env
@@ -67,6 +91,9 @@ class GoTolangEnv:
         if label in self.label_env:
             return self.label_env.get(label).copy()
         return None
+
+    def get_sys_func(self, name):
+        return self.symbol_env.symbol_d.get(name)
 
     def __str__(self):
         return "goTolangEnv object: (\n\tsymbol: {}\n\tlabel: {}\n)".format(

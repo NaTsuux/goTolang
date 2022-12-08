@@ -22,6 +22,13 @@ class CtxNode:
         else:
             return self._value
 
+    @property
+    def vtype(self):
+        if self.is_ptr:
+            return self.cite.type
+        else:
+            return self.type
+
     @value.setter
     def value(self, value):
         self._value = value

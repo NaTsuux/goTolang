@@ -28,3 +28,12 @@ def goto_resume(func):
             return self.visitChildren(ctx)
 
     return wrapper
+
+
+def skip_chain(func):
+    @functools.wraps(func)
+    def wrapper(self, ctx):
+        if ctx.getChildCount() == 1:
+            return self.visitChildren(ctx)
+        return func(self, ctx)
+    return wrapper

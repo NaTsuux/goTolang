@@ -8,14 +8,14 @@
 # 输入用例： 1~9的整数、任意浮点数（覆盖触发EPS warning与不触发的情况）、字符串（读入时报错）
 
 mp=ARRAY(100,100)
-mp[1,1]='ABC'
-mp[2,1]='123'
-mp[3,1]=" _\n"
+mp[0,0]='ABC'
+mp[1,0]='123'
+mp[2,0]=" _\n"
 mp[4,98]="PPP" # 由于超出数组长度，会报错，注释掉这句才能正常运行程序
 
-PRINT(GETEPS())
-SETEPS(0.1)
-PRINT(GETEPS())
+PRINT(GETEPS(), '\n')
+SETEPS(1)
+PRINT(GETEPS(), '\n')
 
 -> 10
 @NICE

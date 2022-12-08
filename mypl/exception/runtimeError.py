@@ -39,3 +39,23 @@ class GoTolangFuncTypeError(GoTolangRuntimeError):
 class GoTolangRedunGobackError(GoTolangRuntimeError):
     def __init__(self, ctx):
         super(GoTolangRedunGobackError, self).__init__(ctx)
+
+
+class GoTolangArrayOutOfIndexError(GoTolangRuntimeError):
+    def __init__(self, ctx):
+        super(GoTolangArrayOutOfIndexError, self).__init__(ctx)
+
+
+class GoTolangDivZeroError(GoTolangRuntimeError):
+    def __init__(self, ctx):
+        super(GoTolangDivZeroError, self).__init__(ctx)
+
+
+class GoTolangModZeroError(GoTolangRuntimeError):
+    def __init__(self, ctx):
+        super(GoTolangModZeroError, self).__init__(ctx)
+
+
+class GoTolangTypeError(GoTolangRuntimeError):
+    def __init__(self, ctx):
+        super(GoTolangTypeError, self).__init__(ctx)

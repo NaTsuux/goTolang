@@ -433,7 +433,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.File_input_no_eofContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_file_input_no_eof)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 90
@@ -989,7 +989,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.Expr_stmtContext(self, self._ctx, self.state)
         self.enterRule(localctx, 14, self.RULE_expr_stmt)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 122
@@ -1070,7 +1070,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.Testlist_star_exprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 16, self.RULE_testlist_star_expr)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 135
@@ -1168,7 +1168,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.AugassignContext(self, self._ctx, self.state)
         self.enterRule(localctx, 18, self.RULE_augassign)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 146
@@ -1334,7 +1334,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.If_stmtContext(self, self._ctx, self.state)
         self.enterRule(localctx, 24, self.RULE_if_stmt)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 154
@@ -1490,7 +1490,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.Or_testContext(self, self._ctx, self.state)
         self.enterRule(localctx, 28, self.RULE_or_test)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 177
@@ -1555,7 +1555,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.And_testContext(self, self._ctx, self.state)
         self.enterRule(localctx, 30, self.RULE_and_test)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 185
@@ -1684,7 +1684,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.ComparisonContext(self, self._ctx, self.state)
         self.enterRule(localctx, 34, self.RULE_comparison)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 198
@@ -1875,7 +1875,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.ExprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 38, self.RULE_expr)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 221
@@ -1940,7 +1940,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.Xor_exprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 40, self.RULE_xor_expr)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 229
@@ -2005,7 +2005,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.And_exprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 42, self.RULE_and_expr)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 237
@@ -2076,7 +2076,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.Shift_exprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 44, self.RULE_shift_expr)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 245
@@ -2152,7 +2152,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.Arith_exprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 46, self.RULE_arith_expr)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 253
@@ -2240,7 +2240,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.TermContext(self, self._ctx, self.state)
         self.enterRule(localctx, 48, self.RULE_term)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 261
@@ -2313,7 +2313,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.FactorContext(self, self._ctx, self.state)
         self.enterRule(localctx, 50, self.RULE_factor)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.state = 272
             self._errHandler.sync(self)
@@ -2383,7 +2383,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.PowerContext(self, self._ctx, self.state)
         self.enterRule(localctx, 52, self.RULE_power)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 274
@@ -2443,7 +2443,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.Atom_exprContext(self, self._ctx, self.state)
         self.enterRule(localctx, 54, self.RULE_atom_expr)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 279
@@ -2524,7 +2524,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.AtomContext(self, self._ctx, self.state)
         self.enterRule(localctx, 56, self.RULE_atom)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 303
@@ -2635,7 +2635,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.Testlist_compContext(self, self._ctx, self.state)
         self.enterRule(localctx, 58, self.RULE_testlist_comp)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 305
@@ -2722,7 +2722,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.TrailerContext(self, self._ctx, self.state)
         self.enterRule(localctx, 60, self.RULE_trailer)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.state = 327
             self._errHandler.sync(self)
@@ -2808,7 +2808,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.SubscriptlistContext(self, self._ctx, self.state)
         self.enterRule(localctx, 62, self.RULE_subscriptlist)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 329
@@ -2882,7 +2882,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.TestlistContext(self, self._ctx, self.state)
         self.enterRule(localctx, 64, self.RULE_testlist)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 340
@@ -2956,7 +2956,7 @@ class goTolangParser(Parser):
 
         localctx = goTolangParser.ArglistContext(self, self._ctx, self.state)
         self.enterRule(localctx, 66, self.RULE_arglist)
-        self._la = 0  # Token type
+        self._la = 0  # Token _type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 351
